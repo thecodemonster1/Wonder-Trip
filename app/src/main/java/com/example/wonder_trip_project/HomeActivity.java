@@ -24,7 +24,7 @@ public class HomeActivity extends AppCompatActivity {
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
             int itemId = item.getItemId();
-
+            // switch case is not working... But if conditions are...
             if (itemId == R.id.home) {
                 replaceFragment(new HomeFragment());
             } else if (itemId == R.id.profile) {
@@ -34,17 +34,6 @@ public class HomeActivity extends AppCompatActivity {
             } else if (itemId == R.id.settings) {
                 replaceFragment(new SettingsFragment());
             }
-            
-//            switch (item.getItemId()){
-//                case R.id.home: replaceFragment(new HomeFragment());
-//                break;
-//                case R.id.profile: replaceFragment(new ProfileFragment());
-//                break;
-//                case R.id.add: replaceFragment(new AddFragment());
-//                break;
-//                case R.id.settings: replaceFragment(new SettingsFragment());
-//                break;
-//            }
 
             return true;
         });
