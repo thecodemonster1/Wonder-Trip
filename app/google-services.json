@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "477603427290",
+    "project_id": "wondertrip0",
+    "storage_bucket": "wondertrip0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:477603427290:android:15b236dc71fd60f46346e3",
+        "android_client_info": {
+          "package_name": "com.example.wonder_trip_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-y4kqBoic61k6yKG2k8HmQSpYy4IglEo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
