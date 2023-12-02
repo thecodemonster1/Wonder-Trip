@@ -17,7 +17,13 @@ public class MainActivity extends AppCompatActivity {
     // Click handling method
     public void onClickableTextClick(View view) {
         // Create an Intent to navigate to the next activity
-        Intent intent = new Intent(this, SignIn.class);
+        Intent intent = new Intent(this, SignInActivity.class);
+        startActivity(intent);
+    }
+
+    public void onClickableTextClick2(View view) {
+        // Create an Intent to navigate to the next activity
+        Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
     }
 }
