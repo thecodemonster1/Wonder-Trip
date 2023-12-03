@@ -62,8 +62,10 @@ public class SignInActivity extends AppCompatActivity {
         if (!username.isEmpty() && !email.isEmpty() && !password.isEmpty() && !password2.isEmpty() && !dob.isEmpty()){
 //            Toast.makeText(MainActivity.this, "Username: " + username + " Password: " + password, Toast.LENGTH_SHORT).show();
             if (password.equals(password2)){
-                Toast.makeText(SignInActivity.this, "Successfully Signed Up", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignInActivity.this, "Signing Up Successful", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                intent.putExtra("regUsername", username);
+                intent.putExtra("regPassword", password);
                 startActivity(intent);
             }else {
                 Toast.makeText(SignInActivity.this, "Passwords are doesn't match", Toast.LENGTH_SHORT).show();

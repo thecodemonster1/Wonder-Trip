@@ -6,19 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="92dp"
-        android:layout_height="78dp"
-        android:layout_marginStart="159dp"
-        android:layout_marginTop="124dp"
-        android:layout_marginEnd="160dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_person_24" />
-
     <EditText
         android:id="@+id/txtUsername"
         android:layout_width="wrap_content"
@@ -35,30 +22,31 @@
         android:id="@+id/btnLogIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="36dp"
         android:text="Log In"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        android:onClick="onClickableTextClick2"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <TextView
         android:id="@+id/linkCreateNew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="36dp"
+        android:linksClickable="true"
+        android:onClick="onClickableTextClick"
         android:text="here"
         android:textColor="#E33A3A"
+        android:textColorLink="#703838"
         app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/txtPassword"
-        android:onClick="onClickableTextClick" />
+        app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="112dp"
+        android:layout_marginStart="108dp"
         android:layout_marginTop="36dp"
         android:text="Create new account? "
         app:layout_constraintStart_toStartOf="parent"
@@ -69,11 +57,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="36dp"
         android:ems="10"
         android:hint="Passwrod"
         android:inputType="textPassword"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtUsername" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="92dp"
+        android:layout_height="78dp"
+        android:layout_marginStart="159dp"
+        android:layout_marginTop="124dp"
+        android:layout_marginEnd="160dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_person_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

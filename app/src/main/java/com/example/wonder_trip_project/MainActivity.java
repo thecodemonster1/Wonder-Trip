@@ -38,16 +38,24 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void onClickableTextClick2(View view) {
-        // Create an Intent to navigate to the next activity
-        Intent intent = new Intent(this, HomeActivity.class);
-        startActivity(intent);
-    }
+//    public void getData(){
+//        Intent intent = getIntent();
+//        String regUsername = intent.getStringExtra("regUsername");
+//        String regPassword = intent.getStringExtra("regPassword");
+//    }
 
     public void btnLogInHandler() {
         String username = txtUsername.getText().toString();
         String password = txtPassword.getText().toString();
 
-        Toast.makeText(MainActivity.this, "Username: " + username + " Password: " + password, Toast.LENGTH_SHORT).show();
+        Intent intent = getIntent();
+        String regUsername = intent.getStringExtra("regUsername");
+        String regPassword = intent.getStringExtra("regPassword");
+
+        if (username.equals(regUsername) && password.equals(regPassword)){
+            Toast.makeText(MainActivity.this, "LogIn Successful", Toast.LENGTH_SHORT).show();
+            intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+        }
     }
 }
