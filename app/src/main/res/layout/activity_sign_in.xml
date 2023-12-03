@@ -6,39 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".SignInActivity">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="113dp"
-        android:layout_height="66dp"
-        android:layout_marginStart="149dp"
-        android:layout_marginTop="105dp"
-        android:layout_marginEnd="149dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_add_photo_alternate_24" />
-
     <EditText
         android:id="@+id/txtRegUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="107dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="94dp"
         android:ems="10"
         android:hint="Username"
         android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/imgButton" />
 
     <EditText
         android:id="@+id/txtRegEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="106dp"
-        android:layout_marginTop="31dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="94dp"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtRegUsername" />
 
@@ -46,11 +39,13 @@
         android:id="@+id/txtRegPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="106dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="94dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtRegEmail" />
 
@@ -58,11 +53,13 @@
         android:id="@+id/txtRegPassword2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="106dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="94dp"
         android:ems="10"
         android:hint="Confirm Password"
         android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtRegPassword" />
 
@@ -70,11 +67,13 @@
         android:id="@+id/txtRegDOB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="107dp"
-        android:layout_marginTop="31dp"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="94dp"
         android:ems="10"
-        android:hint="Date Of Birth"
+        android:hint="YYYY/MM/DD"
         android:inputType="date"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtRegPassword2" />
 
@@ -82,10 +81,22 @@
         android:id="@+id/btnSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="158dp"
-        android:layout_marginTop="51dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="151dp"
+        android:onClick="onClickableTextClick"
         android:text="Sign Up"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtRegDOB"
-        android:onClick="onClickableTextClick" />
+        app:layout_constraintTop_toBottomOf="@+id/txtRegDOB" />
+
+    <ImageButton
+        android:id="@+id/imgButton"
+        android:layout_width="125dp"
+        android:layout_height="109dp"
+        android:layout_marginTop="84dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/baseline_add_circle_24" />
 </androidx.constraintlayout.widget.ConstraintLayout>
