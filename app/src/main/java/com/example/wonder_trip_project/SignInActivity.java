@@ -1,11 +1,14 @@
 package com.example.wonder_trip_project;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +28,7 @@ public class SignInActivity extends AppCompatActivity {
     Button btnSignUp;
     ImageButton imgButton;
     FirebaseAuth mAuth;
-    ProgressBar progBar;
+//    ProgressBar progBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +44,7 @@ public class SignInActivity extends AppCompatActivity {
         txtDOB = findViewById(R.id.txtRegDOB);
         btnSignUp = findViewById(R.id.btnSignUp);
         imgButton = findViewById(R.id.imgButton);
-        progBar = findViewById(R.id.progressBar);
+//        progBar = findViewById(R.id.progressBar);
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,60 +63,28 @@ public class SignInActivity extends AppCompatActivity {
 
 
     public void btnSignUpHandler(){
-        progBar.setVisibility(View.VISIBLE);
+//        progBar.setVisibility(View.VISIBLE);
         String username = txtUsername.getText().toString();
         String email = txtEmail.getText().toString();
         String password = txtPassword.getText().toString();
         String password2 = txtPassword2.getText().toString();
         String dob = txtDOB.getText().toString();
 
-//        System.out.println("Usrname: "+username + "\nEmail: " + email + "\nPassword: " + password + "\nPassword2: " + password2 + "\nDate Of Birth: " + dob);
+        System.out.println("Usrname: "+username + "\nEmail: " + email + "\nPassword: " + password + "\nPassword2: " + password2 + "\nDate Of Birth: " + dob);
 
-//        if (!username.isEmpty() && !email.isEmpty() && !password.isEmpty() && !password2.isEmpty() && !dob.isEmpty()){
-//            if (password.equals(password2)){
-//                Toast.makeText(SignInActivity.this, "Signing Up Successful", Toast.LENGTH_SHORT).show();
-//                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-//                intent.putExtra("regEmail", email);
-//                intent.putExtra("regPassword", password);
-//                startActivity(intent);
-//            }else {
-//                Toast.makeText(SignInActivity.this, "Passwords are doesn't match", Toast.LENGTH_SHORT).show();
-//            }
-//        }else{
-//            Toast.makeText(SignInActivity.this, "You missed on or more field to fill", Toast.LENGTH_SHORT).show();
-//        }
-
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        progBar.setVisibility(View.GONE);
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                            intent.putExtra("regEmail", email);
-                            intent.putExtra("regPassword", password);
-                            startActivity(intent);
-//                            if (!username.isEmpty() && !email.isEmpty() && !password.isEmpty() && !password2.isEmpty() && !dob.isEmpty()){
-//                                if (password.equals(password2)){
-//                                    Toast.makeText(SignInActivity.this, "Signing Up Successful", Toast.LENGTH_SHORT).show();
-//                                    Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-//                                    intent.putExtra("regEmail", email);
-//                                    intent.putExtra("regPassword", password);
-//                                    startActivity(intent);
-//                                }else {
-//                                    Toast.makeText(SignInActivity.this, "Passwords are doesn't match", Toast.LENGTH_SHORT).show();
-//                                }
-//                            }else{
-//                                Toast.makeText(SignInActivity.this, "You missed on or more field to fill", Toast.LENGTH_SHORT).show();
-//                            }
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(SignInActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+        if (!username.isEmpty() && !email.isEmpty() && !password.isEmpty() && !password2.isEmpty() && !dob.isEmpty()){
+            if (password.equals(password2)){
+                Toast.makeText(SignInActivity.this, "Signing Up Successful", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                intent.putExtra("regUsername", username);
+                intent.putExtra("regPassword", password);
+                startActivity(intent);
+            }else {
+                Toast.makeText(SignInActivity.this, "Passwords are doesn't match", Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            Toast.makeText(SignInActivity.this, "You missed on or more field to fill", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
