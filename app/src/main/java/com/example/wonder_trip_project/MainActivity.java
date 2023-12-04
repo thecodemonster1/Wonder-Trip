@@ -6,10 +6,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -28,7 +31,8 @@ import com.google.firebase.database.ValueEventListener;
 public class MainActivity extends AppCompatActivity {
     EditText txtUsername, txtPassword;
     Button btnLogIn;
-    FirebaseAuth mAuth;
+//    CheckBox checkBoxRememberMe;
+//    FirebaseAuth mAuth;
 //    ProgressBar progBar;
 
     @Override
@@ -38,12 +42,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Get a reference to the "users" node in the database
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
-
-        mAuth = FirebaseAuth.getInstance();
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+//        boolean rememberMe = preferences.getBoolean("rememberMe", false);
+//        checkBoxRememberMe.setChecked(rememberMe);
 
         txtUsername = findViewById(R.id.txtUsername);
         txtPassword = findViewById(R.id.txtPassword);
         btnLogIn = findViewById(R.id.btnLogIn);
+
 
 
 
@@ -65,20 +71,27 @@ public class MainActivity extends AppCompatActivity {
                             String regEmail = userSnapshot.child("email").getValue(String.class);
                             String regPassword = userSnapshot.child("password").getValue(String.class);
 
-                            // Do something with the user details
-//                            Toast.makeText(MainActivity.this, "Username: " + regUsername + ", Email: " + regEmail + ", Password: " + regPassword, Toast.LENGTH_SHORT).show();
+                            if ((!username.equals(regUsername)) || (!password.equals(regPassword))){
+                                Toast.makeText(getApplicationContext(), "Username or Password Doesn't match", Toast.LENGTH_SHORT).show();
+                            }
                             if (username.equals(regUsername) && password.equals(regPassword)){
                                 if (username.isEmpty() || password.isEmpty()){
-                                    Toast.makeText(MainActivity.this, "Can't LogIn Field(s) are empty", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Can't LogIn Field(s) are empty", Toast.LENGTH_SHORT).show();
                                 }else{
-                                    Toast.makeText(MainActivity.this, "LogIn Successful", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Loggedin as "+username, Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+
+//                                    // check box - remember me Configurations
+//                                    boolean rememberMe = checkBoxRememberMe.isChecked();
+//                                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//                                    SharedPreferences.Editor editor = preferences.edit();
+//                                    editor.putBoolean("rememberMe", rememberMe);
+//                                    editor.apply();
+
                                     startActivity(intent);
+                                    finish();
                                 }
                             }
-//                            if (!(username.equals(regUsername)) || !(password.equals(regPassword))){
-//                                Toast.makeText(MainActivity.this, "Email or Password Doesn't match", Toast.LENGTH_SHORT).show();
-//                            }123
                         }
                     }
 
