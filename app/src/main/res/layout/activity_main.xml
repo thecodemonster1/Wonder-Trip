@@ -6,14 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+<!--    <user-permisson android:name="@android:permission.INTERNET" />-->
+
     <EditText
-        android:id="@+id/txtUsername"
+        android:id="@+id/txtEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginTop="92dp"
         android:ems="10"
-        android:hint="Username"
+        android:hint="Email"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
@@ -62,14 +64,14 @@
         android:hint="Passwrod"
         android:inputType="textPassword"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
 
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="92dp"
         android:layout_height="78dp"
         android:layout_marginStart="159dp"
-        android:layout_marginTop="124dp"
+        android:layout_marginTop="128dp"
         android:layout_marginEnd="160dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

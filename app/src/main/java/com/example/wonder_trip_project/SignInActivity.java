@@ -1,5 +1,6 @@
 package com.example.wonder_trip_project;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,21 +11,28 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class SignInActivity extends AppCompatActivity {
-    EditText txtUsername;
-    EditText txtEmail;
-    EditText txtPassword;
-    EditText txtPassword2;
-    EditText txtDOB;
+    EditText txtUsername, txtEmail, txtPassword, txtPassword2, txtDOB;
     Button btnSignUp;
     ImageButton imgButton;
+    FirebaseAuth mAuth;
+    ProgressBar progBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        mAuth = FirebaseAuth.getInstance();
 
         txtUsername = findViewById(R.id.txtRegUsername);
         txtEmail = findViewById(R.id.txtRegEmail);
@@ -33,6 +41,7 @@ public class SignInActivity extends AppCompatActivity {
         txtDOB = findViewById(R.id.txtRegDOB);
         btnSignUp = findViewById(R.id.btnSignUp);
         imgButton = findViewById(R.id.imgButton);
+        progBar = findViewById(R.id.progressBar);
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,49 +60,62 @@ public class SignInActivity extends AppCompatActivity {
 
 
     public void btnSignUpHandler(){
+        progBar.setVisibility(View.VISIBLE);
         String username = txtUsername.getText().toString();
         String email = txtEmail.getText().toString();
         String password = txtPassword.getText().toString();
         String password2 = txtPassword2.getText().toString();
         String dob = txtDOB.getText().toString();
 
-        System.out.println("Usrname: "+username + "\nEmail: " + email + "\nPassword: " + password + "\nPassword2: " + password2 + "\nDate Of Birth: " + dob);
+//        System.out.println("Usrname: "+username + "\nEmail: " + email + "\nPassword: " + password + "\nPassword2: " + password2 + "\nDate Of Birth: " + dob);
 
-        if (!username.isEmpty() && !email.isEmpty() && !password.isEmpty() && !password2.isEmpty() && !dob.isEmpty()){
-//            Toast.makeText(MainActivity.this, "Username: " + username + " Password: " + password, Toast.LENGTH_SHORT).show();
-            if (password.equals(password2)){
-                Toast.makeText(SignInActivity.this, "Signing Up Successful", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                intent.putExtra("regUsername", username);
-                intent.putExtra("regPassword", password);
-                startActivity(intent);
-            }else {
-                Toast.makeText(SignInActivity.this, "Passwords are doesn't match", Toast.LENGTH_SHORT).show();
-            }
-        }else{
-            Toast.makeText(SignInActivity.this, "You missed on or more field to fill", Toast.LENGTH_SHORT).show();
-        }
+//        if (!username.isEmpty() && !email.isEmpty() && !password.isEmpty() && !password2.isEmpty() && !dob.isEmpty()){
+//            if (password.equals(password2)){
+//                Toast.makeText(SignInActivity.this, "Signing Up Successful", Toast.LENGTH_SHORT).show();
+//                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+//                intent.putExtra("regEmail", email);
+//                intent.putExtra("regPassword", password);
+//                startActivity(intent);
+//            }else {
+//                Toast.makeText(SignInActivity.this, "Passwords are doesn't match", Toast.LENGTH_SHORT).show();
+//            }
+//        }else{
+//            Toast.makeText(SignInActivity.this, "You missed on or more field to fill", Toast.LENGTH_SHORT).show();
+//        }
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        progBar.setVisibility(View.GONE);
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                            intent.putExtra("regEmail", email);
+                            intent.putExtra("regPassword", password);
+                            startActivity(intent);
+//                            if (!username.isEmpty() && !email.isEmpty() && !password.isEmpty() && !password2.isEmpty() && !dob.isEmpty()){
+//                                if (password.equals(password2)){
+//                                    Toast.makeText(SignInActivity.this, "Signing Up Successful", Toast.LENGTH_SHORT).show();
+//                                    Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+//                                    intent.putExtra("regEmail", email);
+//                                    intent.putExtra("regPassword", password);
+//                                    startActivity(intent);
+//                                }else {
+//                                    Toast.makeText(SignInActivity.this, "Passwords are doesn't match", Toast.LENGTH_SHORT).show();
+//                                }
+//                            }else{
+//                                Toast.makeText(SignInActivity.this, "You missed on or more field to fill", Toast.LENGTH_SHORT).show();
+//                            }
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(SignInActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
 
     }
 
 
-//    private void openImagePicker() {
-//        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        startActivityForResult(intent, PICK_IMAGE_REQUEST);
-//    }
-//
-//    // Handle the result of the image picker
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-//            // Handle the selected image URI, e.g., display it in an ImageView
-//            Uri selectedImageUri = data.getData();
-//            ImageView imageView = findViewById(R.id.imgButton);
-//            imageView.setImageURI(selectedImageUri);
-//        }
-//    }
-//
-//    private static final int PICK_IMAGE_REQUEST = 1;
 }
