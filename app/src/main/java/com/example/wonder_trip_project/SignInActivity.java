@@ -1,41 +1,44 @@
 package com.example.wonder_trip_project;
 
-import static android.content.ContentValues.TAG;
-
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Objects;
 
 public class SignInActivity extends AppCompatActivity {
     EditText txtUsername, txtEmail, txtPassword, txtPassword2, txtDOB;
     Button btnSignUp;
-    ImageButton imgButton;
-    FirebaseAuth mAuth;
+    ImageView imgProfileView;
+    FloatingActionButton btnImagePicker;
+
+//    FirebaseAuth mAuth;
 //    ProgressBar progBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        if (getSupportActionBar() != null) {
+            Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(new ColorDrawable(getColor(R.color.blue)));
+        }
 
         DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users"); // Push the datas to "users" node
         String userId = usersRef.push().getKey(); // Generates a unique key for the new user
@@ -46,7 +49,8 @@ public class SignInActivity extends AppCompatActivity {
         txtPassword2 = findViewById(R.id.txtRegPassword2);
         txtDOB = findViewById(R.id.txtRegDOB);
         btnSignUp = findViewById(R.id.btnSignUp);
-        imgButton = findViewById(R.id.imgButton);
+        imgProfileView = findViewById(R.id.imgView);
+        btnImagePicker = findViewById(R.id.btnImagePicker);
 //        progBar = findViewById(R.id.progressBar);
 
 
@@ -84,11 +88,30 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-//        imgButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//            }
-//        });
+        btnImagePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImagePicker.with(SignInActivity.this)
+                        .crop()	    			//Crop image(Optional), Check Customization for more option
+                        .compress(1024)			//Final image size will be less than 1 MB(Optional)
+                        .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                        .start();
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        assert data != null;
+//        Uri uri = data.getData();
+//        imgProfileView.setImageURI(uri);
+        if (resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            imgProfileView.setImageURI(uri);
+        } else {
+            // Handle the case where the image picker did not return a valid result
+            Toast.makeText(this, "Image selection canceled", Toast.LENGTH_SHORT).show();
+        }
     }
 }
