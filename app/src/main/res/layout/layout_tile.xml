@@ -3,18 +3,6 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
-        android:text="Assalaamu alaikkum,"
-        android:textSize="30sp" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
@@ -24,7 +12,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="70dp"
             android:rowCount="5">
             <!--    android:rowCount="5"-->
 
