@@ -123,7 +123,7 @@
             app:shapeAppearanceOverlay="@style/circular"
             app:srcCompat="@drawable/baseline_person_24"
             app:strokeColor="@color/black"
-            app:strokeWidth="5dp" />
+            app:strokeWidth="2dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnImagePicker"
@@ -131,14 +131,12 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-
-            android:backgroundTint="#6B2FFF00"
-            android:contentDescription="TODO"
-            android:tint="@color/black"
+            android:backgroundTint="#FF0000"
+            android:tint="#003AFF"
+            app:srcCompat="@drawable/baseline_add_circle_24"
             app:layout_constraintBottom_toBottomOf="@+id/imgView"
             app:layout_constraintEnd_toEndOf="@+id/imgView"
-            app:shapeAppearanceOverlay="@style/circular"
-            tools:ignore="ContentDescription" />
+            app:shapeAppearanceOverlay="@style/circular" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
