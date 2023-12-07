@@ -1,27 +1,16 @@
 package com.example.wonder_trip_project;
 
-import static android.content.ContentValues.TAG;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -71,9 +60,11 @@ public class MainActivity extends AppCompatActivity {
                             String regEmail = userSnapshot.child("email").getValue(String.class);
                             String regPassword = userSnapshot.child("password").getValue(String.class);
 
-                            if ((!username.equals(regUsername)) || (!password.equals(regPassword))){
-                                Toast.makeText(getApplicationContext(), "Username or Password Doesn't match", Toast.LENGTH_SHORT).show();
-                            }
+                            // Something wrong here on this message... Consider later 👇
+
+//                            if ((!username.equals(regUsername)) || (!password.equals(regPassword))){
+//                                Toast.makeText(getApplicationContext(), "Username or Password Doesn't match", Toast.LENGTH_SHORT).show();
+//                            }
                             if (username.equals(regUsername) && password.equals(regPassword)){
                                 if (username.isEmpty() || password.isEmpty()){
                                     Toast.makeText(getApplicationContext(), "Can't LogIn Field(s) are empty", Toast.LENGTH_SHORT).show();
@@ -106,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Click handling method
-    public void onClickableTextClick(View view) {
+    public void onClickableTextClick_Goto_sign_in(View view) {
         // Create an Intent to navigate to the next activity
         Intent intent = new Intent(this, SignInActivity.class);
         startActivity(intent);

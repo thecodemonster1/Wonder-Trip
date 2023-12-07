@@ -1,5 +1,6 @@
 package com.example.wonder_trip_project;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +20,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.Objects;
 
@@ -31,6 +36,9 @@ public class SignInActivity extends AppCompatActivity {
 //    FirebaseAuth mAuth;
 //    ProgressBar progBar;
 
+    DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users"); // Push the datas to "users" node
+    String userId = usersRef.push().getKey(); // Generates a unique key for the new user
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +48,12 @@ public class SignInActivity extends AppCompatActivity {
             Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(new ColorDrawable(getColor(R.color.blue)));
         }
 
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users"); // Push the datas to "users" node
-        String userId = usersRef.push().getKey(); // Generates a unique key for the new user
 
+
+
+//        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users"); // Push the datas to "users" node
+//        String userId = usersRef.push().getKey(); // Generates a unique key for the new user
+//=================================Input Fields (End)=================================
         txtUsername = findViewById(R.id.txtRegUsername);
         txtEmail = findViewById(R.id.txtRegEmail);
         txtPassword = findViewById(R.id.txtRegPassword);
@@ -53,18 +64,22 @@ public class SignInActivity extends AppCompatActivity {
         btnImagePicker = findViewById(R.id.btnImagePicker);
 //        progBar = findViewById(R.id.progressBar);
 
+//=================================Input Fields (End)=================================
+
 
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//=================================Input Variables (Begin)=================================
                 String username = txtUsername.getText().toString();
                 String email = txtEmail.getText().toString();
                 String password = txtPassword.getText().toString();
                 String password2 = txtPassword2.getText().toString();
                 String dob = txtDOB.getText().toString();
 //        progBar.setVisibility(View.VISIBLE);
+//=================================Input Variables (End)=================================
 
-                System.out.println("Usrname: "+username + "\nEmail: " + email + "\nPassword: " + password + "\nPassword2: " + password2 + "\nDate Of Birth: " + dob);
+//                System.out.println("Usrname: "+username + "\nEmail: " + email + "\nPassword: " + password + "\nPassword2: " + password2 + "\nDate Of Birth: " + dob);
 
                 if (!username.isEmpty() && !email.isEmpty() && !password.isEmpty() && !password2.isEmpty() && !dob.isEmpty()){
                     if (password.equals(password2)){
@@ -103,12 +118,53 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+//=================================Input Fields, Variables (Begin)=================================
+
+        txtUsername = findViewById(R.id.txtRegUsername);
+        txtEmail = findViewById(R.id.txtRegEmail);
+        txtPassword = findViewById(R.id.txtRegPassword);
+        txtDOB = findViewById(R.id.txtRegDOB);
+
+        String username = txtUsername.getText().toString();
+        String email = txtEmail.getText().toString();
+        String password = txtPassword.getText().toString();
+        String dob = txtDOB.getText().toString();
+
+//=================================Input Fields, Variables (End)=================================
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+
+        System.out.println("userID: "+userId);
+
         assert data != null;
-//        Uri uri = data.getData();
-//        imgProfileView.setImageURI(uri);
-        if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) { // with error handling
             Uri uri = data.getData();
-            imgProfileView.setImageURI(uri);
+            imgProfileView.setImageURI(uri); // This code is setting the image to image view
+
+//=================================Image Uploading Code (Begin)=================================
+            // Use a unique identifier for each image, e.g., user's UID or a random string
+            String imageName = (userId+".jpg");
+            StorageReference imageRef = storageRef.child("images/" + imageName);
+
+            assert uri != null;
+            UploadTask uploadTask = imageRef.putFile(uri);
+
+            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                    // Calculate the progress percentage
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                    // Update your UI or log the progress
+                    // For example, update a progress bar
+                    int progressInt = (int) progress;
+//                    progressBar.setProgress(progressInt);
+                }
+            });
+//=================================Image Uploading Code (End)=================================
+
         } else {
             // Handle the case where the image picker did not return a valid result
             Toast.makeText(this, "Image selection canceled", Toast.LENGTH_SHORT).show();
