@@ -18,7 +18,7 @@
         android:hint="Username"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView3ActivityMain" />
 
     <Button
         android:id="@+id/btnLogIn"
@@ -72,7 +72,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtUsername" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imageView3ActivityMain"
         android:layout_width="92dp"
         android:layout_height="78dp"
         android:layout_marginStart="159dp"

@@ -48,11 +48,6 @@ public class SignInActivity extends AppCompatActivity {
             Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(new ColorDrawable(getColor(R.color.blue)));
         }
 
-
-
-
-//        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users"); // Push the datas to "users" node
-//        String userId = usersRef.push().getKey(); // Generates a unique key for the new user
 //=================================Input Fields (End)=================================
         txtUsername = findViewById(R.id.txtRegUsername);
         txtEmail = findViewById(R.id.txtRegEmail);
@@ -91,7 +86,7 @@ public class SignInActivity extends AppCompatActivity {
                         usersRef.child(userId).child("email").setValue(email);
                         usersRef.child(userId).child("password").setValue(password);
                         usersRef.child(userId).child("dob").setValue(dob);
-
+                        Toast.makeText(SignInActivity.this, "userID: "+userId, Toast.LENGTH_SHORT).show();
                         startActivity(intent);
                     }else {
                         Toast.makeText(SignInActivity.this, "Passwords are doesn't match", Toast.LENGTH_SHORT).show();

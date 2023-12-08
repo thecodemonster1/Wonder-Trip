@@ -3,44 +3,55 @@ package com.example.wonder_trip_project;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
-
+import com.example.wonder_trip_project.databinding.ActivityMainBinding;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageException;
+import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     EditText txtUsername, txtPassword;
     Button btnLogIn;
-//    CheckBox checkBoxRememberMe;
-//    FirebaseAuth mAuth;
-//    ProgressBar progBar;
+    ImageView imageView3ActivityMain;
+//    ActivityMainBinding binding;
+    HomeFragment homeFragment;
 
+    // Get a reference to the "users" node in the database
+    DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        binding = ActivityMainBinding.inflate(getLayoutInflater());
+//        setContentView(binding.getRoot());
         setContentView(R.layout.activity_main);
-
-        // Get a reference to the "users" node in the database
-        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
-//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-//        boolean rememberMe = preferences.getBoolean("rememberMe", false);
-//        checkBoxRememberMe.setChecked(rememberMe);
 
         txtUsername = findViewById(R.id.txtUsername);
         txtPassword = findViewById(R.id.txtPassword);
         btnLogIn = findViewById(R.id.btnLogIn);
-
-
-
+        imageView3ActivityMain = findViewById(R.id.imageView3ActivityMain);
 
         btnLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +71,9 @@ public class MainActivity extends AppCompatActivity {
                             String regEmail = userSnapshot.child("email").getValue(String.class);
                             String regPassword = userSnapshot.child("password").getValue(String.class);
 
-                            // Something wrong here on this message... Consider later 👇
+//
+                            // Something wrong here on this if condition message... Consider later 👇
+                            // I found the wrong in here this code inside a for loop thats why...
 
 //                            if ((!username.equals(regUsername)) || (!password.equals(regPassword))){
 //                                Toast.makeText(getApplicationContext(), "Username or Password Doesn't match", Toast.LENGTH_SHORT).show();
@@ -72,12 +85,44 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "Loggedin as "+username, Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
 
-//                                    // check box - remember me Configurations
-//                                    boolean rememberMe = checkBoxRememberMe.isChecked();
-//                                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-//                                    SharedPreferences.Editor editor = preferences.edit();
-//                                    editor.putBoolean("rememberMe", rememberMe);
-//                                    editor.apply();
+                                    // Pass data to HomeFragment
+                                    homeFragment = HomeFragment.newInstance(username, password);
+                                    getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.frame_layout, homeFragment)
+                                            .addToBackStack(null)
+                                            .commit();
+//                                    // Image Retriving Code ====== We can't do this on this activity
+//                                    storageRef = FirebaseStorage.getInstance().getReference("images/"+userId+".jpg");
+//
+//                                    try {
+//                                        File localFile = File.createTempFile(userId+"",".jpg");
+//                                        storageRef.getFile(localFile)
+//                                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+//                                                    @Override
+//                                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+//
+//
+//                                                        Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+//                                                        binding.homeFragmentTopBarProfileImage.setImageBitmap(bitmap); // homeFragmentTopBarProfileImage
+//                                                    }
+//                                                }).addOnFailureListener(new OnFailureListener() {
+//                                                    @Override
+//                                                    public void onFailure(@NonNull Exception e) {
+//                                                        if (e instanceof StorageException && ((StorageException) e).getErrorCode() == StorageException.ERROR_OBJECT_NOT_FOUND) {
+//                                                            // Object does not exist
+//                                                            // ...
+//                                                        } else {
+//                                                            // Other storage-related errors
+//                                                            // ...
+//                                                        }
+//
+//                                                        Toast.makeText(MainActivity.this, "Failed to retrive...", Toast.LENGTH_SHORT).show();
+//
+//                                                    }
+//                                                });
+//                                    }catch (IOException e){
+//                                        e.printStackTrace();
+//                                    }
 
                                     startActivity(intent);
                                     finish();
@@ -98,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
 
     // Click handling method
     public void onClickableTextClick_Goto_sign_in(View view) {
-        // Create an Intent to navigate to the next activity
         Intent intent = new Intent(this, SignInActivity.class);
         startActivity(intent);
     }
