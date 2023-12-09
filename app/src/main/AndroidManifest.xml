@@ -13,8 +13,9 @@
         android:theme="@style/Theme.WonderTripProject"
         tools:targetApi="31">
 
+        <!--            android:name=".HomeActivity"-->
         <activity
-            android:name=".HomeActivity"
+            android:name=".SplashActivity"
             android:exported="false" />
         <activity
             android:name=".SignInActivity"
@@ -22,8 +23,10 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+
+        <!--            android:name=".SplashActivity"-->
         <activity
-            android:name=".SplashActivity"
+            android:name=".HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

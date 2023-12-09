@@ -6,7 +6,7 @@
     android:gravity="center"
     android:orientation="vertical"
     android:clickable="true"
-    android:onClick="onClickableTextClick_Goto_sign_in"
+    android:onClick="onClickableLayoutClick_goto_view_tile"
     android:focusable="true">
 
     <ImageView
