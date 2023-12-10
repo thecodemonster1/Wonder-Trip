@@ -23,7 +23,8 @@
         android:text="Title"
         android:textAlignment="center"
         android:textSize="34sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_margin="8dp"/>
 
 
     <TextView
@@ -31,7 +32,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="yyyy-mm-dd" />
+        android:text="yyyy-mm-dd"
+        android:layout_margin="8dp"/>
 
 <!--    <ImageView-->
 <!--        android:layout_width="wrap_content"-->
@@ -53,11 +55,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="5.0" />
+            android:text="5.0"
+            android:layout_marginTop="25dp"
+            android:layout_margin="10dp"/>
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/baseline_star_24"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:layout_margin="8dp"/>
     </LinearLayout>
 </LinearLayout>

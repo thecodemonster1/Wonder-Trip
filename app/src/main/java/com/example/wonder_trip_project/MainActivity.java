@@ -2,6 +2,7 @@ package com.example.wonder_trip_project;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -12,7 +13,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.wonder_trip_project.databinding.ActivityMainBinding;
@@ -52,6 +55,20 @@ public class MainActivity extends AppCompatActivity {
         txtPassword = findViewById(R.id.txtPassword);
         btnLogIn = findViewById(R.id.btnLogIn);
         imageView3ActivityMain = findViewById(R.id.imageView3ActivityMain);
+
+        // Inflate the another_layout.xml
+        View anotherLayout = getLayoutInflater().inflate(R.layout.home_fragment_top_bar, null);
+
+        // Find the TextView in the inflated layout
+        TextView anotherTextView = anotherLayout.findViewById(R.id.homeFragmentTopBarProfileText);
+
+        // Set the text for the TextView
+        anotherTextView.setText("Updated text for another TextView");
+
+        // Now you can add the inflated layout to your main layout if needed
+        // For example, if you have a LinearLayout in your main layout:
+        ConstraintLayout mainLayout = findViewById(R.layout.activity_home);
+        mainLayout.addView(anotherLayout);
 
         btnLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
