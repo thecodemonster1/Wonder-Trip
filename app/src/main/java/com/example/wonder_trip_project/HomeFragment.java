@@ -235,8 +235,4 @@ public class HomeFragment extends Fragment {
     private void showToast(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
-
-    public void onClickableLayoutClick_goto_view_tile(){
-
-    }
 }

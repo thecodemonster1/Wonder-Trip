@@ -5,7 +5,7 @@
     android:layout_gravity="center_vertical|center_horizontal"
     android:gravity="center"
     android:orientation="vertical"
-    android:clickable="true"
+    android:linksClickable="true"
     android:onClick="onClickableLayoutClick_goto_view_tile"
     android:focusable="true">
 

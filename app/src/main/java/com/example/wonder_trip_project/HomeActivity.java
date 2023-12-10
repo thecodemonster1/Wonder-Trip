@@ -7,6 +7,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
 import com.example.wonder_trip_project.databinding.ActivityHomeBinding;
 
@@ -43,5 +45,11 @@ public class HomeActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
+    }
+
+    public void onClickableLayoutClick_goto_view_tile(View view) {
+        replaceFragment(new AddFragment());
+        Log.d("MyApp", "No any errors in Fragment Changing");
+
     }
 }
