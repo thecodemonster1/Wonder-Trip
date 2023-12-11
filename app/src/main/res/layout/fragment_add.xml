@@ -33,6 +33,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="373dp"
                     android:clickable="true"
+                    android:id="@+id/imgContent"
                     android:onClick="onImageClick_addImage"
                     android:src="@drawable/baseline_add_photo_alternate_24" />
 
@@ -41,6 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:hint="Title"
+                    android:id="@+id/txtContentTitle"
                     android:textAlignment="center"
                     android:textSize="30sp"
                     android:textStyle="bold" />
@@ -59,7 +61,7 @@
                         android:id="@+id/dateTextView"/>
 
                     <ImageView
-                        android:id="@+id/datePickImage"
+                        android:id="@+id/txtContentDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
@@ -75,7 +77,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="5.0" />
+                            android:layout_marginEnd="5dp"
+                            android:hint="5.0"
+                            android:clickable="true"
+                            android:id="@+id/txtContentRate"/>
+
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -91,12 +97,19 @@
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     />
+                <NumberPicker
+                    android:id="@+id/numberPicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone"/>
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:hint="This is a sample text"
+                    android:id="@+id/txtContentText"
                     android:textAlignment="gravity" />
 
             </LinearLayout>

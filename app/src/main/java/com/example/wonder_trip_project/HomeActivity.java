@@ -28,7 +28,7 @@ import com.google.firebase.storage.UploadTask;
 public class HomeActivity extends AppCompatActivity {
 
     ActivityHomeBinding binding;
-    ImageView imgProfileView;
+    ImageView imgContent;
 
 
     DatabaseReference contentRef = FirebaseDatabase.getInstance().getReference("journals"); // Push the datas to "users" node
@@ -98,8 +98,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
-//=================================Input Fields, Variables (End)=================================
+        imgContent = findViewById(R.id.imgContent);
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
@@ -109,7 +108,7 @@ public class HomeActivity extends AppCompatActivity {
         assert data != null;
         if (resultCode == RESULT_OK) { // with error handling
             Uri uri = data.getData();
-            imgProfileView.setImageURI(uri); // This code is setting the image to image view
+            imgContent.setImageURI(uri); // This code is setting the image to image view
 
 //=================================Image Uploading Code (Begin)=================================
             // Use a unique identifier for each image, e.g., user's UID or a random string

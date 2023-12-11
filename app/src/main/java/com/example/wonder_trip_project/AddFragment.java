@@ -5,12 +5,12 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 /**
@@ -23,6 +23,8 @@ public class AddFragment extends Fragment {
     private TextView dateTextView;
     private DatePicker datePicker;
     private ImageView datePickImage;
+    private NumberPicker numberPicker;
+    private TextView txtContentRate;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -73,7 +75,9 @@ public class AddFragment extends Fragment {
         // Initialize views
         dateTextView = view.findViewById(R.id.dateTextView);
         datePicker = view.findViewById(R.id.datePicker);
-        datePickImage = view.findViewById(R.id.datePickImage);
+        datePickImage = view.findViewById(R.id.txtContentDate);
+        numberPicker = view.findViewById(R.id.numberPicker);
+        txtContentRate = view.findViewById(R.id.txtContentRate);
 
         // Set initial visibility
         datePicker.setVisibility(View.GONE);
@@ -86,7 +90,46 @@ public class AddFragment extends Fragment {
             }
         });
 
+
+
+        txtContentRate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onNumberPicker(v);
+            }
+        });
+
         return view;
+    }
+
+    // Handle click on Number Picker
+    public void onNumberPicker(View view) {
+
+        // Set the decimal values as strings
+        String[] displayedValues = {"0.5", "1.0", "1.5", "2.0", "2.5", "3.0", "3.5", "4.0", "4.5", "5.0"};
+
+        // Set the Values
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(displayedValues.length - 1);
+        numberPicker.setDisplayedValues(displayedValues);
+        numberPicker.setValue(1);
+
+        // Toggle visibility of the NumberPicker
+        if (numberPicker.getVisibility() == View.VISIBLE) {
+            numberPicker.setVisibility(View.GONE);
+        } else {
+            numberPicker.setVisibility(View.VISIBLE);
+
+            // Set a listener to react to value changes
+            numberPicker.setOnValueChangedListener((picker, oldVal, newVal) -> {
+                // Handle the selected value
+                // Convert the selected index to the corresponding decimal value
+                double selectedValue = Double.parseDouble(displayedValues[newVal]);
+
+                // newVal contains the currently selected number
+                txtContentRate.setText(String.valueOf(selectedValue));
+            });
+        }
     }
 
     // Handle click on date TextView
