@@ -105,6 +105,8 @@
             android:layout_marginEnd="151dp"
             android:layout_marginBottom="50dp"
             android:text="Sign Up"
+            android:backgroundTint="@color/spetia"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -122,7 +124,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearanceOverlay="@style/circular"
             app:srcCompat="@drawable/baseline_person_24"
-            app:strokeColor="@color/black"
+            app:strokeColor="@color/spetia"
             app:strokeWidth="2dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -131,7 +133,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:backgroundTint="#FF0000"
+            android:backgroundTint="@color/spetia"
             android:tint="#003AFF"
             app:srcCompat="@drawable/baseline_add_circle_24"
             app:layout_constraintBottom_toBottomOf="@+id/imgView"

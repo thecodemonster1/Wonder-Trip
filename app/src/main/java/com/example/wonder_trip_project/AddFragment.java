@@ -1,12 +1,17 @@
 package com.example.wonder_trip_project;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +19,10 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class AddFragment extends Fragment {
+
+    private TextView dateTextView;
+    private DatePicker datePicker;
+    private ImageView datePickImage;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,6 +68,47 @@ public class AddFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add, container, false);
+        View view = inflater.inflate(R.layout.fragment_add, container, false);
+
+        // Initialize views
+        dateTextView = view.findViewById(R.id.dateTextView);
+        datePicker = view.findViewById(R.id.datePicker);
+        datePickImage = view.findViewById(R.id.datePickImage);
+
+        // Set initial visibility
+        datePicker.setVisibility(View.GONE);
+
+        // Set click listener for dateTextView
+        datePickImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDateClick(v);
+            }
+        });
+
+        return view;
     }
+
+    // Handle click on date TextView
+    public void onDateClick(View view) {
+        // Toggle visibility of the DatePicker
+        if (datePicker.getVisibility() == View.VISIBLE) {
+            datePicker.setVisibility(View.GONE);
+        } else {
+            datePicker.setVisibility(View.VISIBLE);
+
+            // Set a listener for date picker to update dateTextView when a date is selected
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                datePicker.setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        // Update dateTextView with the selected date
+                        String selectedDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                        dateTextView.setText(selectedDate);
+                    }
+                });
+            }
+        }
+    }
+
 }

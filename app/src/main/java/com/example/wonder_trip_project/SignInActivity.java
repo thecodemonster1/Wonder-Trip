@@ -141,7 +141,7 @@ public class SignInActivity extends AppCompatActivity {
 //=================================Image Uploading Code (Begin)=================================
             // Use a unique identifier for each image, e.g., user's UID or a random string
             String imageName = (userId+".jpg");
-            StorageReference imageRef = storageRef.child("images/" + imageName);
+            StorageReference imageRef = storageRef.child("images/profile/" + imageName);
 
             assert uri != null;
             UploadTask uploadTask = imageRef.putFile(uri);
