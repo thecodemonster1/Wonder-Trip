@@ -31,7 +31,8 @@ public class HomeActivity extends AppCompatActivity {
     ImageView imgContent;
 
 
-    DatabaseReference contentRef = FirebaseDatabase.getInstance().getReference("journals"); // Push the datas to "users" node
+
+    DatabaseReference contentRef = FirebaseDatabase.getInstance().getReference("users").child("journals"); // Push the datas to "users" node
     String contentId = contentRef.push().getKey();
 
     @Override
@@ -57,6 +58,7 @@ public class HomeActivity extends AppCompatActivity {
 
             return true;
         });
+
     }
 
 
@@ -73,12 +75,10 @@ public class HomeActivity extends AppCompatActivity {
 
     public void onLayoutClick_goto_view_tile(View view) {
         replaceFragment(new HomeTileViewFragment(), R.id.home);
-        Log.d("MyApp", "No any errors in Fragment Changing");
     }
 
     public void onButtonClick_Goto_add(View view) {
         replaceFragment(new AddFragment(), R.id.add);
-        Log.d("MyApp", "No any errors in Fragment Changing");
     }
 
     public void onImageClick_addImage(View view){
@@ -95,6 +95,8 @@ public class HomeActivity extends AppCompatActivity {
         Log.d("MyApp", "Working Save Content FAB");
 
     }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -103,7 +105,7 @@ public class HomeActivity extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
-        Log.d("Image", "userID: "+contentId);
+        Log.d("MyApp", "userID: "+contentId);
 
         assert data != null;
         if (resultCode == RESULT_OK) { // with error handling
@@ -128,14 +130,16 @@ public class HomeActivity extends AppCompatActivity {
                     // For example, update a progress bar
                     int progressInt = (int) progress;
 //                    progressBar.setProgress(progressInt);
+                    Log.d("MyApp", "Upload progress: " + progressInt + "%");
                 }
             });
+            Log.d("MyApp", "Image is uploaded");
 //=================================Image Uploading Code (End)=================================
 
         } else {
             // Handle the case where the image picker did not return a valid result
             Toast.makeText(this, "Image selection canceled", Toast.LENGTH_SHORT).show();
-            Log.d("Image", "Image selection canceled");
+            Log.d("MyApp", "Image selection canceled");
         }
     }
 

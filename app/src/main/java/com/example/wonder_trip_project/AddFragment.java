@@ -13,6 +13,9 @@ import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AddFragment#newInstance} factory method to
@@ -20,11 +23,17 @@ import android.widget.TextView;
  */
 public class AddFragment extends Fragment {
 
-    private TextView dateTextView;
+    private TextView dateTextView, txtContentRate;
     private DatePicker datePicker;
     private ImageView datePickImage;
     private NumberPicker numberPicker;
-    private TextView txtContentRate;
+
+
+
+//    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+//
+//    // Reference to the "journals" node
+//    DatabaseReference journalsRef = rootRef.child("users").child("Nl4N9BTlJb7Ycc-l3X8").child("journals");
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -79,8 +88,8 @@ public class AddFragment extends Fragment {
         numberPicker = view.findViewById(R.id.numberPicker);
         txtContentRate = view.findViewById(R.id.txtContentRate);
 
-        // Set initial visibility
-        datePicker.setVisibility(View.GONE);
+//        // Set initial visibility
+//        datePicker.setVisibility(View.GONE);
 
         // Set click listener for dateTextView
         datePickImage.setOnClickListener(new View.OnClickListener() {
@@ -90,14 +99,13 @@ public class AddFragment extends Fragment {
             }
         });
 
-
-
         txtContentRate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onNumberPicker(v);
             }
         });
+
 
         return view;
     }

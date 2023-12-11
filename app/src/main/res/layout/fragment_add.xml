@@ -120,13 +120,16 @@
         android:id="@+id/editContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:clickable="true"
         android:onClick="onButtonClick_saveContents"
-        app:srcCompat="@drawable/baseline_save_24"
         app:backgroundTint="@color/spetia"
-        app:elevation="20dp"/>
+        app:elevation="20dp"
+        app:srcCompat="@drawable/baseline_save_24" />
 
 </RelativeLayout>

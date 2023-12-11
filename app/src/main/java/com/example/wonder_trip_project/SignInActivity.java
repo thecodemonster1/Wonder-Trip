@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -86,6 +87,9 @@ public class SignInActivity extends AppCompatActivity {
                         usersRef.child(userId).child("email").setValue(email);
                         usersRef.child(userId).child("password").setValue(password);
                         usersRef.child(userId).child("dob").setValue(dob);
+
+
+                        showLog("UserId: "+userId);
                         Toast.makeText(SignInActivity.this, "userID: "+userId, Toast.LENGTH_SHORT).show();
                         startActivity(intent);
                     }else {
@@ -109,7 +113,6 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -164,5 +167,9 @@ public class SignInActivity extends AppCompatActivity {
             // Handle the case where the image picker did not return a valid result
             Toast.makeText(this, "Image selection canceled", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void showLog(String msg){
+        Log.d("MyApp", msg);
     }
 }

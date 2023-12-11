@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     EditText txtUsername, txtPassword;
     Button btnLogIn;
     ImageView imageView3ActivityMain;
-//    ActivityMainBinding binding;
+    ActivityMainBinding binding;
     HomeFragment homeFragment;
 
     // Get a reference to the "users" node in the database
@@ -47,28 +47,33 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        binding = ActivityMainBinding.inflate(getLayoutInflater());
-//        setContentView(binding.getRoot());
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+//        setContentView(R.layout.activity_main);
 
         txtUsername = findViewById(R.id.txtUsername);
         txtPassword = findViewById(R.id.txtPassword);
         btnLogIn = findViewById(R.id.btnLogIn);
         imageView3ActivityMain = findViewById(R.id.imageView3ActivityMain);
 
-        // Inflate the another_layout.xml
-        View anotherLayout = getLayoutInflater().inflate(R.layout.home_fragment_top_bar, null);
+//        Intent intent = getIntent();
+//        String userId = intent.getStringExtra("userId");
+//        showLog("UserId: "+userId);
 
-        // Find the TextView in the inflated layout
-        TextView anotherTextView = anotherLayout.findViewById(R.id.homeFragmentTopBarProfileText);
 
-        // Set the text for the TextView
-        anotherTextView.setText("Updated text for another TextView");
-
-        // Now you can add the inflated layout to your main layout if needed
-        // For example, if you have a LinearLayout in your main layout:
-        ConstraintLayout mainLayout = findViewById(R.layout.activity_home);
-        mainLayout.addView(anotherLayout);
+//        // Inflate the another_layout.xml
+//        View anotherLayout = getLayoutInflater().inflate(R.layout.home_fragment_top_bar, null);
+//
+//        // Find the TextView in the inflated layout
+//        TextView anotherTextView = anotherLayout.findViewById(R.id.homeFragmentTopBarProfileText);
+//
+//        // Set the text for the TextView
+//        anotherTextView.setText("Updated text for another TextView");
+//
+//        // Now you can add the inflated layout to your main layout if needed
+//        // For example, if you have a LinearLayout in your main layout:
+//        ConstraintLayout mainLayout = findViewById(R.layout.activity_home);
+//        mainLayout.addView(anotherLayout);
 
         btnLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +92,13 @@ public class MainActivity extends AppCompatActivity {
                             String regUsername = userSnapshot.child("username").getValue(String.class);
                             String regEmail = userSnapshot.child("email").getValue(String.class);
                             String regPassword = userSnapshot.child("password").getValue(String.class);
+                            String userId = userSnapshot.getKey();
+
+//                            showLog("DB Username: "+ regUsername);
+//                            showLog("DB Password: "+ regPassword);
+//                            showLog("DB userId: "+ userId);
+
+
 
 //
                             // Something wrong here on this if condition message... Consider later 👇
@@ -102,8 +114,11 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "Loggedin as "+username, Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
 
+//                                    intent.putExtra("userId", userId);
+                                    showLog("UserId_On_LogIn Working: "+userId);
+
                                     // Pass data to HomeFragment
-                                    homeFragment = HomeFragment.newInstance(username, password);
+                                    homeFragment = HomeFragment.newInstance(username, password, userId);
                                     getSupportFragmentManager().beginTransaction()
                                             .replace(R.id.frame_layout, homeFragment)
                                             .addToBackStack(null)
@@ -162,5 +177,9 @@ public class MainActivity extends AppCompatActivity {
     public void onClickableTextClick_Goto_sign_in(View view) {
         Intent intent = new Intent(this, SignInActivity.class);
         startActivity(intent);
+    }
+
+    public void showLog(String msg){
+        Log.d("MyApp", msg);
     }
 }
