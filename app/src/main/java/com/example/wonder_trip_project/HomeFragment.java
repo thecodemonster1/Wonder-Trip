@@ -1,10 +1,7 @@
 package com.example.wonder_trip_project;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -15,21 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FileDownloadTask;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.database.ValueEventListener;
-
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -93,7 +78,7 @@ public class HomeFragment extends Fragment {
             regUsername = args.getString("regUsername");
             regPassword = args.getString("regPassword");
             userId = args.getString("userId");
-            firebaseUserId(userId);
+            firebaseContentId(userId);
             Log.d("MyApp", "HomeFragment_userId: "+userId);
 
 //             //Now you have the username and password in HomeFragment
@@ -111,7 +96,10 @@ public class HomeFragment extends Fragment {
         // Initialize your views
         homeFragmentTopBarProfileImage = rootView.findViewById(R.id.homeFragmentTopBarProfileImage);
         homeFragmentTopBarProfileText = rootView.findViewById(R.id.homeFragmentTopBarProfileText);
-        homeFragmentTopBarProfileText.setText("Amhar");
+//        homeFragmentTopBarProfileText.setText("Amhar");
+
+
+
 //        Bundle args = getArguments();
 //        if (args != null) {
 //            regUsername = args.getString("regUsername");
@@ -244,7 +232,10 @@ public class HomeFragment extends Fragment {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
-    private void firebaseUserId(String userId){
+    private void firebaseContentId(String userId){
         DatabaseReference journalsRef = rootRef.child("users").child(userId).child("journals");
+        homeFragmentTopBarProfileText.setText("Amhar");
+
+
     }
 }
