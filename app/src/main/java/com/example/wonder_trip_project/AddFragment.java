@@ -1,10 +1,12 @@
 package com.example.wonder_trip_project;
 
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +15,13 @@ import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,10 +34,12 @@ public class AddFragment extends Fragment {
     private DatePicker datePicker;
     private ImageView datePickImage;
     private NumberPicker numberPicker;
+    TextInputEditText txtContentTitle, txtContentText;
+    private String contentTitle, dateText, contentRate, contentText;
 
 
 
-//    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
 //
 //    // Reference to the "journals" node
 //    DatabaseReference journalsRef = rootRef.child("users").child("Nl4N9BTlJb7Ycc-l3X8").child("journals");
@@ -41,8 +50,8 @@ public class AddFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    String regUsername;
+    private String userId;
 
     public AddFragment() {
         // Required empty public constructor
@@ -52,16 +61,16 @@ public class AddFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param regUsername Parameter 1.
+     * @param userId Parameter 2.
      * @return A new instance of fragment AddFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AddFragment newInstance(String param1, String param2) {
+    public static AddFragment newInstance(String regUsername, String userId) {
         AddFragment fragment = new AddFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString("regUsername", regUsername);
+        args.putString("userId", userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,10 +78,15 @@ public class AddFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        Bundle args = getArguments();
+        if (args != null) {
+            regUsername = args.getString("regUsername");
+            userId = args.getString("userId");
+//            firebaseContentId(userId);
+//            Log.d("MyApp", "AddFragment_userId: "+userId);
+
         }
+
     }
 
     @Override
@@ -81,15 +95,31 @@ public class AddFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add, container, false);
 
+        // Retrieve arguments
+//        if (getArguments() != null) {
+//            userId = getArguments().getString("userId");
+//            Log.d("MyApp", "AddFragment_userId: "+userId);
+//            // Use userId or other arguments as needed
+//        }
+
         // Initialize views
-        dateTextView = view.findViewById(R.id.dateTextView);
         datePicker = view.findViewById(R.id.datePicker);
         datePickImage = view.findViewById(R.id.txtContentDate);
         numberPicker = view.findViewById(R.id.numberPicker);
+        dateTextView = view.findViewById(R.id.dateTextView);
         txtContentRate = view.findViewById(R.id.txtContentRate);
+        txtContentText = view.findViewById(R.id.txtContentText);
+        txtContentTitle = view.findViewById(R.id.txtContentTitle);
+        FloatingActionButton saveContentBtn = view.findViewById(R.id.saveContentFab);
 
-//        // Set initial visibility
-//        datePicker.setVisibility(View.GONE);
+//        Log.d("MyApp", "datePickImage button is working");
+
+        contentTitle = txtContentTitle.getText().toString();
+        dateText = dateTextView.getText().toString();
+        contentRate = txtContentRate.getText().toString();
+        contentText = txtContentText.getText().toString();
+
+//        firebaseContentId(userId);
 
         // Set click listener for dateTextView
         datePickImage.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +136,15 @@ public class AddFragment extends Fragment {
             }
         });
 
+
+
+        saveContentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                imageUpload(imgContent, uri);
+                onButtonClick_saveContents2(v, contentTitle, dateText, contentRate, contentText);
+            }
+        });
 
         return view;
     }
@@ -161,5 +200,64 @@ public class AddFragment extends Fragment {
             }
         }
     }
+
+    private String getJournalId(){
+        return userId;
+    }
+    private void firebaseContentId(String userId){
+        DatabaseReference journalsRef = rootRef.child("users").child(userId).child("journals");
+        Log.d("MyApp", "firebaseContentId is working");
+        Log.d("MyApp", "AddFragment_userId: "+userId);
+
+    }
+
+    public void onButtonClick_saveContents2(View view, String title, String date, String rate, String journal) {
+
+        Log.d("MyApp", "Title: "+date+"\nJournal Text: "+rate);
+        Log.d("MyApp", "Working Save Content FAB");
+    }
+
+    public void imageUpload(ImageView imgContent, Uri uri) {
+        // Assuming you have received the Uri as a parameter instead of relying on the global 'data' object
+
+        // Set the image to the ImageView
+        imgContent.setImageURI(uri);
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+
+        Log.d("MyApp", "userID: " + getJournalId());
+
+        // Use a unique identifier for each image, e.g., user's UID or a random string
+        String imageName = ("Journal_" + getJournalId() + ".jpg");
+        StorageReference imageRef = storageRef.child("images/journals/" + imageName);
+
+        UploadTask uploadTask = imageRef.putFile(uri);
+
+        uploadTask.addOnProgressListener(taskSnapshot -> {
+            // Calculate the progress percentage
+            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+            // Update your UI or log the progress
+            // For example, update a progress bar
+            int progressInt = (int) progress;
+            Log.d("MyApp", "Upload progress: " + progressInt + "%");
+        });
+
+        uploadTask.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // Image upload successful
+                Log.d("MyApp", "Image is uploaded");
+            } else {
+                // Image upload failed
+                Log.e("MyApp", "Image upload failed: " + task.getException());
+            }
+        });
+    }
+
+// Call this method from your fragment passing the required parameters
+// For example, in your fragment code:
+// imageUpload(imgContent, uri);
+
 
 }

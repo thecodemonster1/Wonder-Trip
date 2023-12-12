@@ -19,9 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="fill"
-            android:layout_margin="8dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="15dp">
+            android:layout_margin="20dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="30dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -45,7 +45,10 @@
                     android:id="@+id/txtContentTitle"
                     android:textAlignment="center"
                     android:textSize="30sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:maxLines="1" />
 
 
 
@@ -71,7 +74,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="200dp">
+                        android:layout_marginStart="170dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -110,14 +113,17 @@
                     android:layout_margin="10dp"
                     android:hint="This is a sample text"
                     android:id="@+id/txtContentText"
-                    android:textAlignment="gravity" />
+                    android:textAlignment="gravity"
+                    android:ems="10"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine"/>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/editContent"
+        android:id="@+id/saveContentFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -127,7 +133,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
-        android:onClick="onButtonClick_saveContents"
+        android:onClick="onButtonClick_saveContents2"
         app:backgroundTint="@color/spetia"
         app:elevation="20dp"
         app:srcCompat="@drawable/baseline_save_24" />

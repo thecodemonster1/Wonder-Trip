@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView3ActivityMain;
     ActivityMainBinding binding;
     HomeFragment homeFragment;
+    AddFragment addFragment;
 
     // Get a reference to the "users" node in the database
     DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
@@ -121,6 +122,12 @@ public class MainActivity extends AppCompatActivity {
                                     homeFragment = HomeFragment.newInstance(username, password, userId);
                                     getSupportFragmentManager().beginTransaction()
                                             .replace(R.id.frame_layout, homeFragment)
+                                            .addToBackStack(null)
+                                            .commit();
+
+                                    addFragment = AddFragment.newInstance(username, userId);
+                                    getSupportFragmentManager().beginTransaction()
+                                            .replace(R.id.frame_layout, addFragment)
                                             .addToBackStack(null)
                                             .commit();
 //                                    // Image Retriving Code ====== We can't do this on this activity

@@ -33,7 +33,7 @@ public class HomeFragment extends Fragment {
     // Assuming you have a Firebase reference
     DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
 
-    // Reference to the "journals" node
+
 
 
 
@@ -233,6 +233,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void firebaseContentId(String userId){
+        // Reference to the "journals" node
         DatabaseReference journalsRef = rootRef.child("users").child(userId).child("journals");
         homeFragmentTopBarProfileText.setText("Amhar");
 
