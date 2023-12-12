@@ -29,6 +29,8 @@ public class HomeActivity extends AppCompatActivity {
 
     ActivityHomeBinding binding;
     ImageView imgContent;
+    String userId;
+    AddFragment addFragment;
 
 
 
@@ -40,7 +42,13 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+//        setContentView(R.layout.activity_home);
         replaceFragment(new HomeFragment(), R.id.home);
+
+        Intent intent = getIntent();
+        userId = intent.getStringExtra("userId");
+
+
 
         binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
@@ -51,6 +59,11 @@ public class HomeActivity extends AppCompatActivity {
             } else if (itemId == R.id.profile) {
                 replaceFragment(new ProfileFragment(), itemId);
             } else if (itemId == R.id.add) {
+                addFragment = AddFragment.newInstance("username", userId);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout, addFragment)
+                        .addToBackStack(null)
+                        .commit();
                 replaceFragment(new AddFragment(), itemId);
             } else if (itemId == R.id.settings) {
                 replaceFragment(new SettingsFragment(), itemId);

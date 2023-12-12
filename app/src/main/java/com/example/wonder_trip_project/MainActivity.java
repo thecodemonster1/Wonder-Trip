@@ -3,6 +3,7 @@ package com.example.wonder_trip_project;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -113,10 +114,7 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), "Can't LogIn Field(s) are empty", Toast.LENGTH_SHORT).show();
                                 }else{
                                     Toast.makeText(getApplicationContext(), "Loggedin as "+username, Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-
-//                                    intent.putExtra("userId", userId);
-                                    showLog("UserId_On_LogIn Working: "+userId);
+                                    showLog("UserId_On_LogIn if Working: "+userId);
 
                                     // Pass data to HomeFragment
                                     homeFragment = HomeFragment.newInstance(username, password, userId);
@@ -125,11 +123,16 @@ public class MainActivity extends AppCompatActivity {
                                             .addToBackStack(null)
                                             .commit();
 
-                                    addFragment = AddFragment.newInstance(username, userId);
-                                    getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.frame_layout, addFragment)
-                                            .addToBackStack(null)
-                                            .commit();
+//                                    addFragment = AddFragment.newInstance(username, userId);
+//                                    getSupportFragmentManager().beginTransaction()
+//                                            .replace(R.id.frame_layout, addFragment)
+//                                            .addToBackStack(null)
+//                                            .commit();
+
+                                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+
+                                    intent.putExtra("userId", userId);
+
 //                                    // Image Retriving Code ====== We can't do this on this activity
 //                                    storageRef = FirebaseStorage.getInstance().getReference("images/"+userId+".jpg");
 //
@@ -189,4 +192,5 @@ public class MainActivity extends AppCompatActivity {
     public void showLog(String msg){
         Log.d("MyApp", msg);
     }
+
 }

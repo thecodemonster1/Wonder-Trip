@@ -3,6 +3,7 @@ package com.example.wonder_trip_project;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -225,6 +226,72 @@ public class HomeFragment extends Fragment {
 //            }
 //        });
 
+        // Example: Set click listener for the first tile
+        rootView.findViewById(R.id.tile1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Handle click for tile 1
+                handleTileClick("tile1");
+            }
+        });
+
+        // Example: Set click listener for the second tile
+        rootView.findViewById(R.id.tile2).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Handle click for tile 2
+                handleTileClick("tile2");
+            }
+        });
+
+        rootView.findViewById(R.id.tile3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Handle click for tile 3
+                handleTileClick("tile3");
+            }
+        });
+
+        rootView.findViewById(R.id.tile4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Handle click for tile 4
+                handleTileClick("tile4");
+            }
+        });
+
+        rootView.findViewById(R.id.tile5).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Handle click for tile 5
+                handleTileClick("tile5");
+            }
+        });
+
+        rootView.findViewById(R.id.tile6).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Handle click for tile 6
+                handleTileClick("tile6");
+            }
+        });
+
+        rootView.findViewById(R.id.tile7).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Handle click for tile 7
+                handleTileClick("tile7");
+            }
+        });
+
+        rootView.findViewById(R.id.tile8).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Handle click for tile 8
+                handleTileClick("tile8");
+            }
+        });
+
         return rootView;
     }
 
@@ -238,5 +305,16 @@ public class HomeFragment extends Fragment {
         homeFragmentTopBarProfileText.setText("Amhar");
 
 
+    }
+
+    private void handleTileClick(String tileId) {
+        // TODO: Retrieve data from Firebase based on tileId
+        // For example, fetch data from Firebase Database using tileId
+
+        // Navigate to fragment_home_tile_view.xml with the fetched data
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, HomeTileViewFragment.newInstance(tileId, "Assalaamu alaikkum"));
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

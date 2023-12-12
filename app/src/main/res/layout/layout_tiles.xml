@@ -29,7 +29,7 @@
 
                 <!--        android:layout_columnWeight="1"-->
                 <!--        android:layout_rowWeight="1"-->
-                <include layout="@layout/layout_a_tile" />
+                <include layout="@layout/fragment_a_tile" android:id="@+id/tile1"/>
             </androidx.cardview.widget.CardView>
 
             <!--tile 0-1-->
@@ -43,7 +43,7 @@
                 app:cardCornerRadius="10dp"
                 app:cardElevation="18dp">
 
-                <include layout="@layout/layout_a_tile" />
+                <include layout="@layout/fragment_a_tile" android:id="@+id/tile2"/>
             </androidx.cardview.widget.CardView>
 
 
@@ -60,7 +60,7 @@
 
                 <!--        android:layout_columnWeight="1"-->
                 <!--        android:layout_rowWeight="1"-->
-                <include layout="@layout/layout_a_tile" />
+                <include layout="@layout/fragment_a_tile" android:id="@+id/tile3"/>
             </androidx.cardview.widget.CardView>
 
             <!--tile 1-1-->
@@ -74,7 +74,7 @@
                 app:cardCornerRadius="10dp"
                 app:cardElevation="18dp">
 
-                <include layout="@layout/layout_a_tile" />
+                <include layout="@layout/fragment_a_tile" android:id="@+id/tile4"/>
             </androidx.cardview.widget.CardView>
 
             <!--tile 2-0-->
@@ -90,7 +90,7 @@
 
                 <!--        android:layout_columnWeight="1"-->
                 <!--        android:layout_rowWeight="1"-->
-                <include layout="@layout/layout_a_tile" />
+                <include layout="@layout/fragment_a_tile" android:id="@+id/tile5"/>
             </androidx.cardview.widget.CardView>
 
             <!--tile 2-1-->
@@ -104,7 +104,7 @@
                 app:cardCornerRadius="10dp"
                 app:cardElevation="18dp">
 
-                <include layout="@layout/layout_a_tile" />
+                <include layout="@layout/fragment_a_tile" android:id="@+id/tile6"/>
             </androidx.cardview.widget.CardView>
 
 
@@ -121,7 +121,7 @@
 
                 <!--        android:layout_columnWeight="1"-->
                 <!--        android:layout_rowWeight="1"-->
-                <include layout="@layout/layout_a_tile" />
+                <include layout="@layout/fragment_a_tile" android:id="@+id/tile7"/>
             </androidx.cardview.widget.CardView>
 
             <!--tile 3-1-->
@@ -135,7 +135,7 @@
                 app:cardCornerRadius="10dp"
                 app:cardElevation="18dp">
 
-                <include layout="@layout/layout_a_tile" />
+                <include layout="@layout/fragment_a_tile" android:id="@+id/tile8"/>
             </androidx.cardview.widget.CardView>
 
         </GridLayout>
