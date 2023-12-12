@@ -43,7 +43,7 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 //        setContentView(R.layout.activity_home);
-        replaceFragment(new HomeFragment(), R.id.home);
+        replaceFragment(new HomeFragment(userId), R.id.home);
 
         Intent intent = getIntent();
         userId = intent.getStringExtra("userId");
@@ -55,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
             int itemId = item.getItemId();
             // switch case is not working... But if conditions are...
             if (itemId == R.id.home) {
-                replaceFragment(new HomeFragment(), itemId);
+                replaceFragment(new HomeFragment(userId), itemId);
             } else if (itemId == R.id.profile) {
                 replaceFragment(new ProfileFragment(), itemId);
             } else if (itemId == R.id.add) {
@@ -64,7 +64,7 @@ public class HomeActivity extends AppCompatActivity {
                         .replace(R.id.frame_layout, addFragment)
                         .addToBackStack(null)
                         .commit();
-                replaceFragment(new AddFragment(), itemId);
+                replaceFragment(new AddFragment(userId), itemId);
             } else if (itemId == R.id.settings) {
                 replaceFragment(new SettingsFragment(), itemId);
             }
@@ -91,7 +91,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void onButtonClick_Goto_add(View view) {
-        replaceFragment(new AddFragment(), R.id.add);
+        replaceFragment(new AddFragment(userId), R.id.add);
     }
 
     public void saveSettingsFab_Action(View view){

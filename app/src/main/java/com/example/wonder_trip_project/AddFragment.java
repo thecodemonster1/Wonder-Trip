@@ -4,7 +4,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,11 +26,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class AddFragment extends Fragment {
 
     private TextView dateTextView, txtContentRate;
@@ -35,12 +33,13 @@ public class AddFragment extends Fragment {
     private ImageView datePickImage;
     private NumberPicker numberPicker;
     TextInputEditText txtContentTitle, txtContentText;
-    String contentTitle, dateText, contentRate, contentText;
-    String userId;
+    String contentTitle, dateText, contentRate, contentText, userId2;
+
+//    String userId2 = "-Nl4N9BTlJb7Ycc-l3X8" ;
 
 
 
-    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference().child("users");
+    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
 //
 //    // Reference to the "journals" node
 //    DatabaseReference journalsRef = rootRef.child("users").child("Nl4N9BTlJb7Ycc-l3X8").child("journals");
@@ -52,10 +51,15 @@ public class AddFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String regUsername;
-    private String userId2;
+    private String userId;
 
-    public AddFragment() {
-        // Required empty public constructor
+//    public AddFragment() {
+//        // Required empty public constructor
+//    }
+
+
+    public AddFragment(String userId) {
+        this.userId = userId;
     }
 
     /**
@@ -68,7 +72,7 @@ public class AddFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static AddFragment newInstance(String regUsername, String userId) {
-        AddFragment fragment = new AddFragment();
+        AddFragment fragment = new AddFragment(userId);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, regUsername);
         args.putString(ARG_PARAM2, userId);
@@ -79,14 +83,18 @@ public class AddFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Bundle args = getArguments();
         if (args != null) {
             regUsername = args.getString(ARG_PARAM1);
-            userId2 = args.getString(ARG_PARAM2);
+            userId = args.getString(ARG_PARAM2);
 //            firebaseContentId(userId2);
-//            Log.d("MyApp", "AddFragment_userId_from onCreate: "+ userId2);
 
         }
+//        if (userId != null){
+//            userId2 = userId;
+//            Log.d("MyApp", "AddFragment_userId_from onCreate: "+ userId2);
+//        }
 
     }
 
@@ -96,11 +104,6 @@ public class AddFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add, container, false);
 
-
-
-        userId = rootRef.push().getKey();
-        Log.d("MyApp", "AddFragment_userId2_from onCreateView: "+ userId2);
-        Log.d("MyApp", "AddFragment_userId_from onCreateView: "+ userId);
         // Initialize views
         datePicker = view.findViewById(R.id.datePicker);
         datePickImage = view.findViewById(R.id.txtContentDate);
@@ -111,12 +114,21 @@ public class AddFragment extends Fragment {
         txtContentTitle = view.findViewById(R.id.txtContentTitle);
         FloatingActionButton saveContentBtn = view.findViewById(R.id.saveContentFab);
 
-//        Log.d("MyApp", "datePickImage button is working");
+//        Log.d("MyApp", "onCreateView is working");
 
         contentTitle = txtContentTitle.getText().toString();
         dateText = dateTextView.getText().toString();
         contentRate = txtContentRate.getText().toString();
         contentText = txtContentText.getText().toString();
+
+
+
+//        if (userId != null){
+//            userId2 = userId;
+//            Log.d("MyApp", "AddFragment_userId_from onCreate: "+ userId2);
+//        }
+//        Log.d("MyApp", "AddFragment_userId_from outside of onClick method: "+ userId2);
+
 
 
 
@@ -137,19 +149,44 @@ public class AddFragment extends Fragment {
             }
         });
 
+
         saveContentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                imageUpload(imgContent, uri);
-//                DatabaseReference journalsRef = rootRef.child("users").child(userId2).child("journals");
-//                journalsRef.child(userId).child("text").setValue(contentText);
-//                journalsRef.child(userId).child("date").setValue(dateText);
-//                journalsRef.child(userId).child("rate").setValue(contentRate);
 
-                Log.d("MyApp", "if input fields are working, \ncontentTitle: "+contentTitle+
-                        "\ndateText: "+dateText+
-                        "\ncontentRate: "+contentRate+
-                        "\ncontentText: "+contentText);
+                contentTitle = txtContentTitle.getText().toString();
+                dateText = dateTextView.getText().toString();
+                contentRate = txtContentRate.getText().toString();
+                contentText = txtContentText.getText().toString();
+
+                // Check if userId is not null
+                Log.d("MyApp", "AddFragment_userId_from onCreateView: "+ userId);
+                if (userId != null) {
+                    Log.d("MyApp", "AddFragment_userId_from onCreateView_inside if() : "+ userId);
+                    // Update the reference to the correct location in the database
+                    DatabaseReference journalsRef = rootRef.child("users").child(userId).child("journals");
+
+                    // Use push() to generate a unique key for the new journal entry
+                    String journalId = journalsRef.push().getKey();
+
+                    // Create a new entry in the "journals" node under the specific user
+                    journalsRef.child(journalId).child("title").setValue(contentTitle);
+                    journalsRef.child(journalId).child("text").setValue(contentText);
+                    journalsRef.child(journalId).child("date").setValue(dateText);
+                    journalsRef.child(journalId).child("rate").setValue(contentRate);
+
+                    Log.d("MyApp", "if input fields are working, \ncontentTitle: " + contentTitle +
+                            "\ndateText: " + dateText +
+                            "\ncontentRate: " + contentRate +
+                            "\ncontentText: " + contentText);
+
+                    // Rest of your code...
+                } else {
+                    // Handle the case where userId is null
+                    Log.e("MyApp", "userId is null");
+                }
+
 //                Log.d("MyApp", "Title: "+contentTitle+"\nJournal Text: "+contentText);
 //                onButtonClick_saveContents2(v, contentTitle, dateText, contentRate, contentText);
             }
@@ -165,7 +202,7 @@ public class AddFragment extends Fragment {
         String[] displayedValues = {"0.5", "1.0", "1.5", "2.0", "2.5", "3.0", "3.5", "4.0", "4.5", "5.0"};
 
         // Set the Values
-        numberPicker.setMinValue(1);
+        numberPicker.setMinValue(0);
         numberPicker.setMaxValue(displayedValues.length - 1);
         numberPicker.setDisplayedValues(displayedValues);
         numberPicker.setValue(1);
@@ -211,15 +248,7 @@ public class AddFragment extends Fragment {
     }
 
     private String getJournalId(){
-        return userId2;
-    }
-    private void firebaseContentId(String userId){
-//        if (userId != null){
-//            DatabaseReference journalsRef = rootRef.child("users").child("-Nl4N9BTlJb7Ycc-l3X8").child("journals");
-//        }
-//        Log.d("MyApp", "firebaseContentId is working");
-        Log.d("MyApp", "AddFragment_userId from onCreateView: "+userId);
-
+        return userId;
     }
 
     public void onButtonClick_saveContents2(View view, String title, String date, String rate, String journal) {
@@ -229,7 +258,7 @@ public class AddFragment extends Fragment {
         Log.d("MyApp", "Working Save Content FAB");
     }
 
-    public void imageUpload(ImageView imgContent, Uri uri) {
+    public void imageUpload(@NonNull ImageView imgContent, Uri uri) {
         // Assuming you have received the Uri as a parameter instead of relying on the global 'data' object
 
         // Set the image to the ImageView

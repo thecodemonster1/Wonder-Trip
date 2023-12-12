@@ -1,7 +1,10 @@
 package com.example.wonder_trip_project;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -13,9 +16,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,7 +41,7 @@ public class HomeFragment extends Fragment {
     private ImageView homeFragmentTopBarProfileImage;
     private TextView homeFragmentTopBarProfileText;
     private StorageReference storageRef;
-    private DatabaseReference usersRef;
+    private DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
 
 
 
@@ -48,8 +62,8 @@ public class HomeFragment extends Fragment {
     private String regPassword;
     private String userId;
 
-    public HomeFragment() {
-        // Required empty public constructor
+    public HomeFragment(String userId) {
+        this.userId = userId;
     }
 
     /**
@@ -62,7 +76,7 @@ public class HomeFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(String regUsername, String regPassword, String userId) {
-        HomeFragment fragment = new HomeFragment();
+        HomeFragment fragment = new HomeFragment(userId);
         Bundle args = new Bundle();
         args.putString("regUsername", regUsername);
         args.putString("regPassword", regPassword);
@@ -79,13 +93,8 @@ public class HomeFragment extends Fragment {
             regUsername = args.getString("regUsername");
             regPassword = args.getString("regPassword");
             userId = args.getString("userId");
-            firebaseContentId(userId);
-            Log.d("MyApp", "HomeFragment_userId: "+userId);
 
-//             //Now you have the username and password in HomeFragment
-//             //Do whatever you need to do with this data
-//            Log.d("MyApp", "username: " + regUsername );
-//            Log.d("MyApp", "password: " + regPassword );
+            Log.d("MyApp", "HomeFragment_userId: "+userId);
 
         }
     }
@@ -114,117 +123,28 @@ public class HomeFragment extends Fragment {
 //
 //        }
 
-//        FirebaseDatabase.getInstance().getReference("users").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-////                    String storedUsername = userSnapshot.child("username").getValue(String.class);
-////                    String storedPassword = userSnapshot.child("password").getValue(String.class);
-////                    String userId = userSnapshot.getKey();
-////
-////                    Log.d("MyApp", "storedUsername: " + storedUsername);
-////                    Log.d("MyApp", "storedPassword: " + storedPassword);
-////                    Log.d("MyApp", "storedUserId: " + userId);
-//
-//
-//                    // Now you have the username and email for each user
-//                    // Do whatever you need to do with this data
-//
-////                        if (regUsername.equals(storedUsername) ){ //&& storedPassword.equals(regPassword)
-////                            Log.d("MyApp2", "username: " + regUsername );
-////                            Log.d("MyApp2", "password: " + regPassword );
-////                            Log.d("MyApp2", "userID: " + userId );
-////                        }
-////                    try {
-////                        File localFile = File.createTempFile(userId + "", ".jpg");
-////                        storageRef.getFile(localFile)
-////                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-////                                    @Override
-////                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-////                                        Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-////                                        homeFragmentTopBarProfileImage.setImageBitmap(bitmap);
-////                                    }
-////                                }).addOnFailureListener(new OnFailureListener() {
-////                                    @Override
-////                                    public void onFailure(@NonNull Exception e) {
-////                                        if (e instanceof StorageException) {
-////                                            ((StorageException) e).getErrorCode();
-////                                        }// Object does not exist
-////                                        Toast.makeText(getActivity(), "Failed to retrieve...", Toast.LENGTH_SHORT).show();
-////                                    }
-////                                });
-////                    } catch (IOException e) {
-////                        e.printStackTrace();
-////                    }
-////                    // Do something with the userId
-////                    showToast("UserID: " + userId);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                Log.e("MyApp", "Database Error: " + error.getMessage());
-//            }
-//        });
+        usersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    if (userSnapshot.child("password").getValue(String.class).equals(regPassword)) {
+                        userId = userSnapshot.getKey(); // Update user ID if found
+                        homeFragmentTopBarProfileText.setText(userSnapshot.child("username").getValue(String.class)); // Set username text
+                        Log.d("MyApp", "Profile Text is want to work...");
+                        imageRetrivalFunc(userId); // Download profile image
+                        break; // Stop iterating after finding a match
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("MyApp", "Database Error: " + error.getMessage());
+            }
+        });
 
-//        usersRef.orderByChild("username").equalTo(regUsername).addListenerForSingleValueEvent(new ValueEventListener() {
-//
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-//                    // Check if the password matches
-//
-//                    // This code is for testing purpose
-//                    String storedUsername = userSnapshot.child("username").getValue(String.class);
-//                    String storedPassword = userSnapshot.child("password").getValue(String.class);
-//                    Log.d("MyApp", "storedUsername: " + storedUsername);
-//                    Log.d("MyApp", "storedPassword: " + storedPassword);
-//
-//                        String storedPassword = userSnapshot.child("password").getValue(String.class);
-//                        assert regPassword != null;
-//                        if (regPassword.equals(storedPassword)) {
-//                            // Found a match
-//                            userId = userSnapshot.getKey();
-//
-//                            // Add your image retrieval code here
-//                            // Image Retrieval Code
-//                            storageRef = FirebaseStorage.getInstance().getReference("images/" + userId + ".jpg");
-//                            showToast("Path: " + storageRef);
-//                            try {
-//                                File localFile = File.createTempFile(userId + "", ".jpg");
-//                                storageRef.getFile(localFile)
-//                                        .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-//                                            @Override
-//                                            public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-//                                                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-//                                                homeFragmentTopBarProfileImage.setImageBitmap(bitmap);
-//                                            }
-//                                        }).addOnFailureListener(new OnFailureListener() {
-//                                            @Override
-//                                            public void onFailure(@NonNull Exception e) {
-//                                                if (e instanceof StorageException) {
-//                                                    ((StorageException) e).getErrorCode();
-//                                                }// Object does not exist
-//                                                Toast.makeText(getActivity(), "Failed to retrieve...", Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        });
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
-//                            // Do something with the userId
-//                            showToast("UserID: " + userId);
-//
-//                            break;  // Assuming there is only one match
-//                        }
-//                }
-//            }
-//
-//            //                @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                // Handle errors
-//                Log.e("MyApp", "Database Error: " + databaseError.getMessage());
-//            }
-//        });
+//        imageRetrivalFunc();
+
 
         // Example: Set click listener for the first tile
         rootView.findViewById(R.id.tile1).setOnClickListener(new View.OnClickListener() {
@@ -292,6 +212,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
+//        firebaseContentId(userId);
         return rootView;
     }
 
@@ -301,12 +222,31 @@ public class HomeFragment extends Fragment {
 
     private void firebaseContentId(String userId){
         // Reference to the "journals" node
-        DatabaseReference journalsRef = rootRef.child("users").child(userId).child("journals");
-        homeFragmentTopBarProfileText.setText("Amhar");
-
+        String userRef = rootRef.child("users").child(userId).child("username").toString();
+        Log.d("NewApp", "username: "+userRef);
+//        homeFragmentTopBarProfileText.setText(journalsRef);
 
     }
 
+    private void imageRetrivalFunc(String userId) {
+        storageRef = FirebaseStorage.getInstance().getReference("images/" + userId + ".jpg");
+        try {
+            File localFile = File.createTempFile(userId + "", ".jpg");
+            storageRef.getFile(localFile)
+                    .addOnSuccessListener(taskSnapshot -> { // Use lambda expressions for concise code
+                        Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                        homeFragmentTopBarProfileImage.setImageBitmap(bitmap);
+                    })
+                    .addOnFailureListener(e -> {
+                        if (e instanceof StorageException) {
+                            ((StorageException) e).getErrorCode();
+                        }
+                        Toast.makeText(getActivity(), "Failed to retrieve image...", Toast.LENGTH_SHORT).show();
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private void handleTileClick(String tileId) {
         // TODO: Retrieve data from Firebase based on tileId
         // For example, fetch data from Firebase Database using tileId
