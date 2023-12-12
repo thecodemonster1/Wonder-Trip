@@ -94,6 +94,11 @@ public class HomeActivity extends AppCompatActivity {
         replaceFragment(new AddFragment(), R.id.add);
     }
 
+    public void saveSettingsFab_Action(View view){
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+    }
+
     public void onImageClick_addImage(View view){
         ImagePicker.with(HomeActivity.this)
                 .crop()	    			//Crop image(Optional), Check Customization for more option
@@ -155,5 +160,6 @@ public class HomeActivity extends AppCompatActivity {
 //            Log.d("MyApp", "Image selection canceled");
 //        }
     }
+
 
 }
