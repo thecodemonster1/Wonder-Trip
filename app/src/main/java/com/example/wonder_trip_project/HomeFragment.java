@@ -99,9 +99,9 @@ public class HomeFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    // Initialize your variables
-                    homeFragmentTopBarProfileImage = rootView.findViewById(R.id.homeFragmentTopBarProfileImage);
-                    homeFragmentTopBarProfileText = rootView.findViewById(R.id.homeFragmentTopBarProfileText);
+//                    // Initialize your variables
+//                    homeFragmentTopBarProfileImage = rootView.findViewById(R.id.homeFragmentTopBarProfileImage);
+//                    homeFragmentTopBarProfileText = rootView.findViewById(R.id.homeFragmentTopBarProfileText);
 
                     String storedUsername = userSnapshot.child("username").getValue(String.class);
                     String storedPassword = userSnapshot.child("password").getValue(String.class);

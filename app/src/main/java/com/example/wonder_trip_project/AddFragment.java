@@ -1,13 +1,13 @@
 package com.example.wonder_trip_project;
 
+import static com.example.wonder_trip_project.Utils.showLog;
+
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +32,7 @@ public class AddFragment extends Fragment {
     private DatePicker datePicker;
     private ImageView datePickImage;
     private NumberPicker numberPicker;
+    FloatingActionButton saveContentBtn;
     TextInputEditText txtContentTitle, txtContentText;
     HomeFragment homeFragment;
     String contentTitle, dateText, contentRate, contentText, userId2;
@@ -113,7 +114,7 @@ public class AddFragment extends Fragment {
         txtContentRate = view.findViewById(R.id.txtContentRate);
         txtContentText = view.findViewById(R.id.txtContentText);
         txtContentTitle = view.findViewById(R.id.txtContentTitle);
-        FloatingActionButton saveContentBtn = view.findViewById(R.id.saveContentFab);
+        saveContentBtn = view.findViewById(R.id.saveContentFab);
 
 //        Log.d("MyApp", "onCreateView is working");
 
@@ -154,42 +155,16 @@ public class AddFragment extends Fragment {
         saveContentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                imageUpload(imgContent, uri);
 
                 contentTitle = txtContentTitle.getText().toString();
                 dateText = dateTextView.getText().toString();
                 contentRate = txtContentRate.getText().toString();
                 contentText = txtContentText.getText().toString();
 
-                // Check if userId is not null
-                Log.d("MyApp", "AddFragment_userId_from onCreateView: "+ userId);
-                if (userId != null) {
-                    Log.d("MyApp", "AddFragment_userId_from onCreateView_inside if() : "+ userId);
-                    // Update the reference to the correct location in the database
-                    DatabaseReference journalsRef = rootRef.child("users").child(userId).child("journals");
-
-                    // Use push() to generate a unique key for the new journal entry
-                    String journalId = journalsRef.push().getKey();
-
-//                    homeFragment = HomeFragment.newInstance()
-
-                    // Create a new entry in the "journals" node under the specific user
-                    journalsRef.child(journalId).child("title").setValue(contentTitle);
-                    journalsRef.child(journalId).child("text").setValue(contentText);
-                    journalsRef.child(journalId).child("date").setValue(dateText);
-                    journalsRef.child(journalId).child("rate").setValue(contentRate);
+//                imageUpload(imgContent, uri);
+                onButtonClick_saveContents(v,userId, contentTitle, dateText, contentRate, contentText);
 
 
-
-                    Utils.showLog("if input fields are working, \ncontentTitle: " + contentTitle +
-                            "\ndateText: " + dateText +
-                            "\ncontentRate: " + contentRate +
-                            "\ncontentText: " + contentText);
-
-                } else {
-                    // Handle the case where userId is null
-                    Log.e("MyApp", "userId is null");
-                }
             }
         });
 
@@ -248,8 +223,40 @@ public class AddFragment extends Fragment {
         }
     }
 
-    public void onButtonClick_saveContents2(View view, String title, String date, String rate, String journal) {
+    public void onButtonClick_saveContents(View view,String userId, String title, String date, String rate, String journal) {
 
+        // Check if userId is not null
+        if (userId != null) {
+//                    showLog("AddFragment_userId_from onCreateView_inside if() : "+ userId);
+            // Update the reference to the correct location in the database
+            DatabaseReference journalsRef = rootRef.child("users").child(userId).child("journals");
+
+            // Use push() to generate a unique key for the new journal entry
+            String journalId = journalsRef.push().getKey();
+
+//                    homeFragment = HomeFragment.newInstance()
+
+            // Create a new entry in the "journals" node under the specific user
+            journalsRef.child(journalId).child("title").setValue(title);
+            journalsRef.child(journalId).child("text").setValue(journal);
+            journalsRef.child(journalId).child("date").setValue(date);
+            journalsRef.child(journalId).child("rate").setValue(rate);
+
+            
+
+
+
+            showLog("if input fields are working, "+
+                    "\nuserId: " + userId +
+                    "\ncontentTitle: " + title +
+                    "\ndateText: " + date +
+                    "\ncontentRate: " + rate +
+                    "\ncontentText: " + journal);
+
+        } else {
+            // Handle the case where userId is null
+            showLog("userId is null", "e");
+        }
 
 //        Log.d("MyApp", "Title: "+title+"\nJournal Text: "+journal);
         Log.d("MyApp", "Working Save Content FAB");

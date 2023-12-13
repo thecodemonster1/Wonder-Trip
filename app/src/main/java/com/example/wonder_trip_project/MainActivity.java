@@ -78,7 +78,8 @@ public class MainActivity extends AppCompatActivity {
                 String password = txtPassword.getText().toString();
                 if (networkInfo == null || !networkInfo.isConnected()) {
                     // No internet connection
-                    Log.e("MyApp", "No internet connection found while trying to access Firebase.");
+                    showToast(getApplicationContext(), "No Internet Connection and Try again");
+                    showLog("No internet connection found while trying to access Firebase.", "e");
                     return; // Stop further execution if no internet
                 }
 

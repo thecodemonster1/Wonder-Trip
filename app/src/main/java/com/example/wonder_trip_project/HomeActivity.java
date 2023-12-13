@@ -32,6 +32,7 @@ public class HomeActivity extends AppCompatActivity {
     String userId, regUsername, regPassword;
     AddFragment addFragment;
     HomeFragment homeFragment;
+    ATileFragment aTileFragment;
 
 
 
@@ -56,6 +57,12 @@ public class HomeActivity extends AppCompatActivity {
                 .addToBackStack(null)
                 .commit();
 
+        aTileFragment = ATileFragment.newInstance(userId, null);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_layout, aTileFragment)
+                .addToBackStack(null)
+                .commit();
+
         replaceFragment(new HomeFragment(userId), R.id.home);
 
 
@@ -70,6 +77,12 @@ public class HomeActivity extends AppCompatActivity {
                         .replace(R.id.frame_layout, homeFragment)
                         .addToBackStack(null)
                         .commit();
+                aTileFragment = ATileFragment.newInstance(userId, null);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout, aTileFragment)
+                        .addToBackStack(null)
+                        .commit();
+
                 replaceFragment(new HomeFragment(userId), itemId);
             } else if (itemId == R.id.profile) {
                 replaceFragment(new ProfileFragment(), itemId);

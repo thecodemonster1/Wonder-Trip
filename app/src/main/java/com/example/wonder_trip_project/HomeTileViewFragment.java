@@ -1,5 +1,7 @@
 package com.example.wonder_trip_project;
 
+import static com.example.wonder_trip_project.Utils.showLog;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -68,7 +70,7 @@ public class HomeTileViewFragment extends Fragment {
 
         viewJournaTitleId = rootView.findViewById(R.id.viewJournaTitleId);
         viewJournaTitleId.setText("I am "+mParam1);
-        Log.d("MyApp", "tileId: "+mParam1 + "\nTest String: "+ mParam2);
+        showLog("tileId: "+mParam1 + "\nTest String: "+ mParam2);
 
         return rootView;
     }
