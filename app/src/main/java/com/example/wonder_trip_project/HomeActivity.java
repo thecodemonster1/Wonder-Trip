@@ -29,8 +29,9 @@ public class HomeActivity extends AppCompatActivity {
 
     ActivityHomeBinding binding;
     ImageView imgContent;
-    String userId;
+    String userId, regUsername, regPassword;
     AddFragment addFragment;
+    HomeFragment homeFragment;
 
 
 
@@ -43,10 +44,19 @@ public class HomeActivity extends AppCompatActivity {
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 //        setContentView(R.layout.activity_home);
-        replaceFragment(new HomeFragment(userId), R.id.home);
 
         Intent intent = getIntent();
         userId = intent.getStringExtra("userId");
+        regUsername = intent.getStringExtra("regUsername");
+        regPassword = intent.getStringExtra("regPassword");
+
+        homeFragment = HomeFragment.newInstance(regUsername, regPassword, userId);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_layout, homeFragment)
+                .addToBackStack(null)
+                .commit();
+
+        replaceFragment(new HomeFragment(userId), R.id.home);
 
 
 
@@ -55,6 +65,11 @@ public class HomeActivity extends AppCompatActivity {
             int itemId = item.getItemId();
             // switch case is not working... But if conditions are...
             if (itemId == R.id.home) {
+                homeFragment = HomeFragment.newInstance(regUsername, regPassword, userId);
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.frame_layout, homeFragment)
+                        .addToBackStack(null)
+                        .commit();
                 replaceFragment(new HomeFragment(userId), itemId);
             } else if (itemId == R.id.profile) {
                 replaceFragment(new ProfileFragment(), itemId);
@@ -88,10 +103,6 @@ public class HomeActivity extends AppCompatActivity {
 
     public void onLayoutClick_goto_view_tile(View view) {
         replaceFragment(new HomeTileViewFragment(), R.id.home);
-    }
-
-    public void onButtonClick_Goto_add(View view) {
-        replaceFragment(new AddFragment(userId), R.id.add);
     }
 
     public void saveSettingsFab_Action(View view){

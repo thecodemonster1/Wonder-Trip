@@ -33,6 +33,7 @@ public class AddFragment extends Fragment {
     private ImageView datePickImage;
     private NumberPicker numberPicker;
     TextInputEditText txtContentTitle, txtContentText;
+    HomeFragment homeFragment;
     String contentTitle, dateText, contentRate, contentText, userId2;
 
 //    String userId2 = "-Nl4N9BTlJb7Ycc-l3X8" ;
@@ -116,10 +117,10 @@ public class AddFragment extends Fragment {
 
 //        Log.d("MyApp", "onCreateView is working");
 
-        contentTitle = txtContentTitle.getText().toString();
-        dateText = dateTextView.getText().toString();
-        contentRate = txtContentRate.getText().toString();
-        contentText = txtContentText.getText().toString();
+//        contentTitle = txtContentTitle.getText().toString();
+//        dateText = dateTextView.getText().toString();
+//        contentRate = txtContentRate.getText().toString();
+//        contentText = txtContentText.getText().toString();
 
 
 
@@ -170,25 +171,25 @@ public class AddFragment extends Fragment {
                     // Use push() to generate a unique key for the new journal entry
                     String journalId = journalsRef.push().getKey();
 
+//                    homeFragment = HomeFragment.newInstance()
+
                     // Create a new entry in the "journals" node under the specific user
                     journalsRef.child(journalId).child("title").setValue(contentTitle);
                     journalsRef.child(journalId).child("text").setValue(contentText);
                     journalsRef.child(journalId).child("date").setValue(dateText);
                     journalsRef.child(journalId).child("rate").setValue(contentRate);
 
-                    Log.d("MyApp", "if input fields are working, \ncontentTitle: " + contentTitle +
+
+
+                    Utils.showLog("if input fields are working, \ncontentTitle: " + contentTitle +
                             "\ndateText: " + dateText +
                             "\ncontentRate: " + contentRate +
                             "\ncontentText: " + contentText);
 
-                    // Rest of your code...
                 } else {
                     // Handle the case where userId is null
                     Log.e("MyApp", "userId is null");
                 }
-
-//                Log.d("MyApp", "Title: "+contentTitle+"\nJournal Text: "+contentText);
-//                onButtonClick_saveContents2(v, contentTitle, dateText, contentRate, contentText);
             }
         });
 
@@ -247,10 +248,6 @@ public class AddFragment extends Fragment {
         }
     }
 
-    private String getJournalId(){
-        return userId;
-    }
-
     public void onButtonClick_saveContents2(View view, String title, String date, String rate, String journal) {
 
 
@@ -267,10 +264,10 @@ public class AddFragment extends Fragment {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
-        Log.d("MyApp", "userID: " + getJournalId());
+        Log.d("MyApp", "userID: " + userId);
 
         // Use a unique identifier for each image, e.g., user's UID or a random string
-        String imageName = ("Journal_" + getJournalId() + ".jpg");
+        String imageName = ("Journal_" + userId + ".jpg");
         StorageReference imageRef = storageRef.child("images/journals/" + imageName);
 
         UploadTask uploadTask = imageRef.putFile(uri);

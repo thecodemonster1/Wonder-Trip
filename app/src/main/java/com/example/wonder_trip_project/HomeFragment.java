@@ -14,16 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
@@ -42,14 +38,9 @@ public class HomeFragment extends Fragment {
     private TextView homeFragmentTopBarProfileText;
     private StorageReference storageRef;
     private DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
-
-
+    private int i = 0;
 
     // Assuming you have a Firebase reference
-    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-
-
-
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -94,8 +85,6 @@ public class HomeFragment extends Fragment {
             regPassword = args.getString("regPassword");
             userId = args.getString("userId");
 
-            Log.d("MyApp", "HomeFragment_userId: "+userId);
-
         }
     }
 
@@ -103,35 +92,34 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // Initialize your views
-        homeFragmentTopBarProfileImage = rootView.findViewById(R.id.homeFragmentTopBarProfileImage);
-        homeFragmentTopBarProfileText = rootView.findViewById(R.id.homeFragmentTopBarProfileText);
-//        homeFragmentTopBarProfileText.setText("Amhar");
 
-
-
-//        Bundle args = getArguments();
-//        if (args != null) {
-//            regUsername = args.getString("regUsername");
-//            regPassword = args.getString("regPassword");
-////            Log.d("MyApp", "username: " + regUsername );
-////            Log.d("MyApp", "password: " + regPassword );
-//
-//            // Now you have the username and password in HomeFragment
-//            // Do whatever you need to do with this data
-//
-//
-//        }
 
         usersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    if (userSnapshot.child("password").getValue(String.class).equals(regPassword)) {
+                    // Initialize your variables
+                    homeFragmentTopBarProfileImage = rootView.findViewById(R.id.homeFragmentTopBarProfileImage);
+                    homeFragmentTopBarProfileText = rootView.findViewById(R.id.homeFragmentTopBarProfileText);
+
+                    String storedUsername = userSnapshot.child("username").getValue(String.class);
+                    String storedPassword = userSnapshot.child("password").getValue(String.class);
+//                    Utils.showLog(storedUsername + ": "+ storedPassword);
+
+                    if (storedUsername.equals(regUsername) && storedPassword.equals(regPassword)) {
                         userId = userSnapshot.getKey(); // Update user ID if found
-                        homeFragmentTopBarProfileText.setText(userSnapshot.child("username").getValue(String.class)); // Set username text
-                        Log.d("MyApp", "Profile Text is want to work...");
-                        imageRetrivalFunc(userId); // Download profile image
+//                        homeFragmentTopBarProfileText.setText(storedUsername); // Set username text  - userSnapshot.child("username").getValue(String.class)
+                        Utils.showLog("Username is " + storedUsername);
+
+//                        for (DataSnapshot journalSnapshot: userSnapshot.child("journals").getChildren()){
+//                            String journalId = userSnapshot.child("journals").getValue(String.class);
+//                            Utils.showLog("JournalId is " + journalSnapshot.child(journalId));
+//                            // if this is working you can do whatever with journalId
+//                        }
+
+//                        imageRetrivalFunc(userId); // Download profile image
+//                        firebaseJournalId(userId, i);
                         break; // Stop iterating after finding a match
                     }
                 }
@@ -139,13 +127,17 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("MyApp", "Database Error: " + error.getMessage());
+                Utils.showLog("Database Error: " + error.getMessage(), "e");
             }
         });
 
-//        imageRetrivalFunc();
+        tileHandler(rootView);
+//        firebaseContentId(userId);
+//        editJournalOnButtonClick_Goto_add(rootView);
+        return rootView;
+    }
 
-
+    private void tileHandler(@NonNull View rootView) {
         // Example: Set click listener for the first tile
         rootView.findViewById(R.id.tile1).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,18 +204,27 @@ public class HomeFragment extends Fragment {
             }
         });
 
-//        firebaseContentId(userId);
-        return rootView;
     }
 
-    private void showToast(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-    }
+    private void firebaseJournalId(String userId, int a){
+        DatabaseReference journalRef = usersRef.child(userId).child("journals");
+        int finalA = a++;
+        journalRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot userSnapshot : snapshot.getChildren()){
+                    String journalId = userSnapshot.getKey();
+                    Log.d("NewApp", "journalId_"+ finalA +": "+journalId);
+                }
+            }
 
-    private void firebaseContentId(String userId){
-        // Reference to the "journals" node
-        String userRef = rootRef.child("users").child(userId).child("username").toString();
-        Log.d("NewApp", "username: "+userRef);
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Utils.showLog("Database Error: " + error.getMessage(), "e");
+
+            }
+        });
+
 //        homeFragmentTopBarProfileText.setText(journalsRef);
 
     }
@@ -241,12 +242,23 @@ public class HomeFragment extends Fragment {
                         if (e instanceof StorageException) {
                             ((StorageException) e).getErrorCode();
                         }
-                        Toast.makeText(getActivity(), "Failed to retrieve image...", Toast.LENGTH_SHORT).show();
+                        Utils.showLog("Failed to retrieve image...");
                     });
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+    public void editJournalOnButtonClick_Goto_add(View view) {
+        view.findViewById(R.id.editContentFab).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // pass the details of the journal to AddFragment
+            }
+        });
+//        replaceFragment(new AddFragment(userId), R.id.add);
+    }
+
     private void handleTileClick(String tileId) {
         // TODO: Retrieve data from Firebase based on tileId
         // For example, fetch data from Firebase Database using tileId

@@ -1,14 +1,20 @@
 package com.example.wonder_trip_project;
 
+import static com.example.wonder_trip_project.Utils.showLog;
+import static com.example.wonder_trip_project.Utils.showToast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -58,24 +64,10 @@ public class MainActivity extends AppCompatActivity {
         btnLogIn = findViewById(R.id.btnLogIn);
         imageView3ActivityMain = findViewById(R.id.imageView3ActivityMain);
 
-//        Intent intent = getIntent();
-//        String userId = intent.getStringExtra("userId");
-//        showLog("UserId: "+userId);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
 
-//        // Inflate the another_layout.xml
-//        View anotherLayout = getLayoutInflater().inflate(R.layout.home_fragment_top_bar, null);
-//
-//        // Find the TextView in the inflated layout
-//        TextView anotherTextView = anotherLayout.findViewById(R.id.homeFragmentTopBarProfileText);
-//
-//        // Set the text for the TextView
-//        anotherTextView.setText("Updated text for another TextView");
-//
-//        // Now you can add the inflated layout to your main layout if needed
-//        // For example, if you have a LinearLayout in your main layout:
-//        ConstraintLayout mainLayout = findViewById(R.layout.activity_home);
-//        mainLayout.addView(anotherLayout);
 
         btnLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,8 +76,14 @@ public class MainActivity extends AppCompatActivity {
 //        progBar.setVisibility(View.VISIBLE);
                 String username = txtUsername.getText().toString();
                 String password = txtPassword.getText().toString();
+                if (networkInfo == null || !networkInfo.isConnected()) {
+                    // No internet connection
+                    Log.e("MyApp", "No internet connection found while trying to access Firebase.");
+                    return; // Stop further execution if no internet
+                }
 
                 usersRef.addValueEventListener(new ValueEventListener() {
+
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         // This method is called once with the initial value and again whenever data at this location is updated.
@@ -96,13 +94,6 @@ public class MainActivity extends AppCompatActivity {
                             String regPassword = userSnapshot.child("password").getValue(String.class);
                             String userId = userSnapshot.getKey();
 
-//                            showLog("DB Username: "+ regUsername);
-//                            showLog("DB Password: "+ regPassword);
-//                            showLog("DB userId: "+ userId);
-
-
-
-//
                             // Something wrong here on this if condition message... Consider later 👇
                             // I found the wrong in here this code inside a for loop thats why...
 
@@ -111,60 +102,16 @@ public class MainActivity extends AppCompatActivity {
 //                            }
                             if (username.equals(regUsername) && password.equals(regPassword)){
                                 if (username.isEmpty() || password.isEmpty()){
-                                    Toast.makeText(getApplicationContext(), "Can't LogIn Field(s) are empty", Toast.LENGTH_SHORT).show();
+                                    showToast(getApplicationContext(),"Can't LogIn Field(s) are empty");
                                 }else{
                                     Toast.makeText(getApplicationContext(), "Loggedin as "+username, Toast.LENGTH_SHORT).show();
                                     showLog("UserId_On_LogIn if Working: "+userId);
 
-                                    // Pass data to HomeFragment
-                                    homeFragment = HomeFragment.newInstance(username, password, userId);
-                                    getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.frame_layout, homeFragment)
-                                            .addToBackStack(null)
-                                            .commit();
-
-//                                    addFragment = AddFragment.newInstance(username, userId);
-//                                    getSupportFragmentManager().beginTransaction()
-//                                            .replace(R.id.frame_layout, addFragment)
-//                                            .addToBackStack(null)
-//                                            .commit();
-
                                     Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
 
                                     intent.putExtra("userId", userId);
-
-//                                    // Image Retriving Code ====== We can't do this on this activity
-//                                    storageRef = FirebaseStorage.getInstance().getReference("images/"+userId+".jpg");
-//
-//                                    try {
-//                                        File localFile = File.createTempFile(userId+"",".jpg");
-//                                        storageRef.getFile(localFile)
-//                                                .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-//                                                    @Override
-//                                                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-//
-//
-//                                                        Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-//                                                        binding.homeFragmentTopBarProfileImage.setImageBitmap(bitmap); // homeFragmentTopBarProfileImage
-//                                                    }
-//                                                }).addOnFailureListener(new OnFailureListener() {
-//                                                    @Override
-//                                                    public void onFailure(@NonNull Exception e) {
-//                                                        if (e instanceof StorageException && ((StorageException) e).getErrorCode() == StorageException.ERROR_OBJECT_NOT_FOUND) {
-//                                                            // Object does not exist
-//                                                            // ...
-//                                                        } else {
-//                                                            // Other storage-related errors
-//                                                            // ...
-//                                                        }
-//
-//                                                        Toast.makeText(MainActivity.this, "Failed to retrive...", Toast.LENGTH_SHORT).show();
-//
-//                                                    }
-//                                                });
-//                                    }catch (IOException e){
-//                                        e.printStackTrace();
-//                                    }
+                                    intent.putExtra("regUsername", regUsername);
+                                    intent.putExtra("regPassword", regPassword);
 
                                     startActivity(intent);
                                     finish();
@@ -189,8 +136,5 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void showLog(String msg){
-        Log.d("MyApp", msg);
-    }
 
 }
