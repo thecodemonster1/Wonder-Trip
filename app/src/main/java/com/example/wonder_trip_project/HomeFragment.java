@@ -1,5 +1,7 @@
 package com.example.wonder_trip_project;
 
+import static com.example.wonder_trip_project.Utils.showLog;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -7,6 +9,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,6 +31,11 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,8 +44,7 @@ import java.io.IOException;
  */
 public class HomeFragment extends Fragment {
 
-    private ImageView homeFragmentTopBarProfileImage;
-    private TextView homeFragmentTopBarProfileText;
+    private RecyclerView homeRecyclerView;
     private StorageReference storageRef;
     private DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
     private int i = 0;
@@ -92,119 +101,185 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
+        homeRecyclerView = rootView.findViewById(R.id.homeRecycleView);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        homeRecyclerView.setLayoutManager(layoutManager);
+
+        FirebaseRecyclerOptions<JournalModel> options =
+                new FirebaseRecyclerOptions.Builder<JournalModel>()
+                        .setQuery(usersRef.child(userId).child("journals").getRef(), JournalModel.class) // userid for the first child
+                        .build();
+
+        homeRecyclerView.setAdapter(new MainAdapter(options));
+
+        showLog("journalId: " + usersRef.child(userId).getDatabase().getReference("journals").getRef().getKey());
 
 
+//        titleOf1 = rootView.findViewById(R.id.titleView_of_a_tile);
+//        titleOf1.setText();
+//        ArrayList<String> journalIds = new ArrayList<>();
         usersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-//                    // Initialize your variables
-//                    homeFragmentTopBarProfileImage = rootView.findViewById(R.id.homeFragmentTopBarProfileImage);
-//                    homeFragmentTopBarProfileText = rootView.findViewById(R.id.homeFragmentTopBarProfileText);
-
+                    // Initialize your variables
+                    TextView titleOf1 = rootView.findViewById(R.id.titleView_of_a_tile);
                     String storedUsername = userSnapshot.child("username").getValue(String.class);
                     String storedPassword = userSnapshot.child("password").getValue(String.class);
-//                    Utils.showLog(storedUsername + ": "+ storedPassword);
+
+                    // Use an ArrayList of maps to store journal data
+                    List<Map<String, Object>> journalMaps = new ArrayList<>();
 
                     if (storedUsername.equals(regUsername) && storedPassword.equals(regPassword)) {
                         userId = userSnapshot.getKey(); // Update user ID if found
-//                        homeFragmentTopBarProfileText.setText(storedUsername); // Set username text  - userSnapshot.child("username").getValue(String.class)
-                        Utils.showLog("Username is " + storedUsername);
+                        showLog("Username is " + storedUsername);
 
-//                        for (DataSnapshot journalSnapshot: userSnapshot.child("journals").getChildren()){
-//                            String journalId = userSnapshot.child("journals").getValue(String.class);
-//                            Utils.showLog("JournalId is " + journalSnapshot.child(journalId));
+                        for (DataSnapshot journalSnapshot: userSnapshot.child("journals").getChildren()){
+//                            String journalId = journalSnapshot.getKey();
+                            // Use a single map for each journal iteration
+                            Map<String, Object> journalMap = new HashMap<>();
+
+                            // Retrieve journal data and extract values
+                            Map<String, Object> journalData = (Map<String, Object>) journalSnapshot.getValue();
+                            String title = (String) journalData.get("title");
+                            String date = (String) journalData.get("date");
+                            String rate = (String) journalData.get("rate");
+                            String text = (String) journalData.get("text");
+
+                            // Check for missing data (optional)
+//                            if (title == null || date == null || rate == null || text == null) {
+//                                // Handle missing data scenario (e.g., show error message)
+//                                continue;
+//                            }
+
+                            // Add extracted values to the map
+                            journalMap.put("title", title);
+                            journalMap.put("date", date);
+                            journalMap.put("rating", rate);
+                            journalMap.put("text", text);
+
+                            // Add the journal map to the list
+                            journalMaps.add(journalMap);
+
+//                            if (!journalMaps.get(0).isEmpty()){
+//                                showLog("Title is " + journalMaps.get(0).get("title"));
+//                            }
+                            // Clear the map for the next iteration
+                            journalMap.clear();
+
+                            // Use journal data for UI updates or other actions
+                            // ...your logic to handle multiple journals and call tileHandler...
+
+                        }
+
+                        // Set title of the first tile (optional)
+//                        if (!journalMaps.isEmpty()) {
+//                            titleOf1.setText((CharSequence) journalMaps);
+//                            if (!journalMaps.get(0).isEmpty()){
+//                                showLog("Title is " + journalMaps.get(0).get("title"));
+//                            }
+//
+////                            showLog("JournalId is " + journalId);
+////                            showLog("Title is " + (String) journalMaps.get(0).get("title"));
 //                            // if this is working you can do whatever with journalId
+////                            tileHandler(rootView, );
 //                        }
 
+
+//                        titleOf1.setText("Hell NO");
+//                        showLog("title1: "+journalIds.get(0));
 //                        imageRetrivalFunc(userId); // Download profile image
 //                        firebaseJournalId(userId, i);
                         break; // Stop iterating after finding a match
                     }
                 }
+
+
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Utils.showLog("Database Error: " + error.getMessage(), "e");
+                showLog("Database Error: " + error.getMessage(), "e");
             }
         });
 
-        tileHandler(rootView);
+//        tileHandler(rootView);
 //        firebaseContentId(userId);
 //        editJournalOnButtonClick_Goto_add(rootView);
         return rootView;
     }
 
-    private void tileHandler(@NonNull View rootView) {
-        // Example: Set click listener for the first tile
-        rootView.findViewById(R.id.tile1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Handle click for tile 1
-                handleTileClick("tile1");
-            }
-        });
-
-        // Example: Set click listener for the second tile
-        rootView.findViewById(R.id.tile2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Handle click for tile 2
-                handleTileClick("tile2");
-            }
-        });
-
-        rootView.findViewById(R.id.tile3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Handle click for tile 3
-                handleTileClick("tile3");
-            }
-        });
-
-        rootView.findViewById(R.id.tile4).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Handle click for tile 4
-                handleTileClick("tile4");
-            }
-        });
-
-        rootView.findViewById(R.id.tile5).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Handle click for tile 5
-                handleTileClick("tile5");
-            }
-        });
-
-        rootView.findViewById(R.id.tile6).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Handle click for tile 6
-                handleTileClick("tile6");
-            }
-        });
-
-        rootView.findViewById(R.id.tile7).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Handle click for tile 7
-                handleTileClick("tile7");
-            }
-        });
-
-        rootView.findViewById(R.id.tile8).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Handle click for tile 8
-                handleTileClick("tile8");
-            }
-        });
-
-    }
+//    private void tileHandler(@NonNull View rootView) {
+//        // Example: Set click listener for the first tile
+//        rootView.findViewById(R.id.title1).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // Handle click for tile 1
+//                handleTileClick("tile1");
+//            }
+//        });
+//
+//        // Example: Set click listener for the second tile
+//        rootView.findViewById(R.id.tile2).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // Handle click for tile 2
+//                handleTileClick("tile2");
+//            }
+//        });
+//
+//        rootView.findViewById(R.id.tile3).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // Handle click for tile 3
+//                handleTileClick("tile3");
+//            }
+//        });
+//
+//        rootView.findViewById(R.id.tile4).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // Handle click for tile 4
+//                handleTileClick("tile4");
+//            }
+//        });
+//
+//        rootView.findViewById(R.id.tile5).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // Handle click for tile 5
+//                handleTileClick("tile5");
+//            }
+//        });
+//
+//        rootView.findViewById(R.id.tile6).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // Handle click for tile 6
+//                handleTileClick("tile6");
+//            }
+//        });
+//
+//        rootView.findViewById(R.id.tile7).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // Handle click for tile 7
+//                handleTileClick("tile7");
+//            }
+//        });
+//
+//        rootView.findViewById(R.id.tile8).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // Handle click for tile 8
+//                handleTileClick("tile8");
+//            }
+//        });
+//
+//    }
 
     private void firebaseJournalId(String userId, int a){
         DatabaseReference journalRef = usersRef.child(userId).child("journals");
@@ -220,12 +295,10 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Utils.showLog("Database Error: " + error.getMessage(), "e");
+                showLog("Database Error: " + error.getMessage(), "e");
 
             }
         });
-
-//        homeFragmentTopBarProfileText.setText(journalsRef);
 
     }
 
@@ -236,13 +309,13 @@ public class HomeFragment extends Fragment {
             storageRef.getFile(localFile)
                     .addOnSuccessListener(taskSnapshot -> { // Use lambda expressions for concise code
                         Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                        homeFragmentTopBarProfileImage.setImageBitmap(bitmap);
+//                        homeFragmentTopBarProfileImage.setImageBitmap(bitmap);
                     })
                     .addOnFailureListener(e -> {
                         if (e instanceof StorageException) {
                             ((StorageException) e).getErrorCode();
                         }
-                        Utils.showLog("Failed to retrieve image...");
+                        showLog("Failed to retrieve image...");
                     });
         } catch (IOException e) {
             e.printStackTrace();

@@ -6,7 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.wonder_trip_project.databinding.ActivityHomeBinding;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,23 +38,38 @@ public class HomeActivity extends AppCompatActivity {
     AddFragment addFragment;
     HomeFragment homeFragment;
     ATileFragment aTileFragment;
+    RecyclerView homeRecycleView;
+    MainAdapter mainAdapter;
 
 
 
-    DatabaseReference contentRef = FirebaseDatabase.getInstance().getReference("users").child("journals"); // Push the datas to "users" node
-    String contentId = contentRef.push().getKey();
+    DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
 
+//    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        homeRecycleView = findViewById(R.id.homeRecycleView);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 //        setContentView(R.layout.activity_home);
+
+//        RecyclerView homeRecycleView = findViewById(R.id.homeRecycleView);
+////        homeRecycleView = findViewById(R.id.homeRecycleView);
+//        homeRecycleView.setLayoutManager(new LinearLayoutManager(this));
 
         Intent intent = getIntent();
         userId = intent.getStringExtra("userId");
         regUsername = intent.getStringExtra("regUsername");
         regPassword = intent.getStringExtra("regPassword");
+
+//        FirebaseRecyclerOptions<JournalModel> options =
+//                new FirebaseRecyclerOptions.Builder<JournalModel>()
+//                        .setQuery(usersRef.child("-NlWDdvKWRPdCZMBTRcZ").child("journals"), JournalModel.class) // userid for the first child
+//                        .build();
+//
+//        mainAdapter = new MainAdapter(options);
+//        homeRecycleView.setAdapter(mainAdapter);
 
         homeFragment = HomeFragment.newInstance(regUsername, regPassword, userId);
         getSupportFragmentManager().beginTransaction()
@@ -57,11 +77,11 @@ public class HomeActivity extends AppCompatActivity {
                 .addToBackStack(null)
                 .commit();
 
-        aTileFragment = ATileFragment.newInstance(userId, null);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_layout, aTileFragment)
-                .addToBackStack(null)
-                .commit();
+//        aTileFragment = ATileFragment.newInstance(userId, null);
+//        getSupportFragmentManager().beginTransaction()
+//                .replace(R.id.frame_layout, aTileFragment)
+//                .addToBackStack(null)
+//                .commit();
 
         replaceFragment(new HomeFragment(userId), R.id.home);
 

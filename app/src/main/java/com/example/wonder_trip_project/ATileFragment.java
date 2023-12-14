@@ -85,16 +85,22 @@ public class ATileFragment extends Fragment {
         journalsRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                String[] journalIdArr = new String[(int) snapshot.getChildrenCount()]; // Pre-allocate space based on child count
+              String[] journalIdsArray;
 
                 for (DataSnapshot childSnapshot : snapshot.getChildren()) {
                     String journalId = childSnapshot.getKey();
                     journalIds.add(journalId);
                 }
-
+                int i = 0;
 //                for (String journalId: journalIds){
+//                    showLog("Journal ID" + (i++) + ": " + journalId);
+//                }
 //                for (int i = 0; i < journalIds.size(); i++){
-                    showLog("Journal ID: " + journalIds);
+////                    journalIdsArray = new String[journalIds.size()];
+////                    journalIds.toArray(journalIdsArray);
+//                    showLog("Journal ID" + (i) + ": " + journalIds.get(i));
+//
+////                    showLog("Journal ID"+(i)+": "+journalIdsArray[i]);
 //                }
             }
 

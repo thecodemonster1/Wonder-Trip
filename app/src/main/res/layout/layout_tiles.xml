@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:gravity="center"
     >
-<!--        android:layout_gravity="center"-->
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -19,6 +19,10 @@
             android:orientation="vertical"
             android:layout_gravity="fill"
             >
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/tileRecycleView"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"/>-->
                 <include layout="@layout/fragment_a_tile" android:id="@+id/tile1"/>
                 <include layout="@layout/fragment_a_tile" android:id="@+id/tile2"/>
                 <include layout="@layout/fragment_a_tile" android:id="@+id/tile3"/>
@@ -27,6 +31,7 @@
                 <include layout="@layout/fragment_a_tile" android:id="@+id/tile6"/>
                 <include layout="@layout/fragment_a_tile" android:id="@+id/tile7"/>
                 <include layout="@layout/fragment_a_tile" android:id="@+id/tile8"/>
+
         </GridLayout>
     </ScrollView>
 
