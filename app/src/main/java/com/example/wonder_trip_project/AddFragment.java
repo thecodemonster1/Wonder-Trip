@@ -164,7 +164,6 @@ public class AddFragment extends Fragment {
 //                imageUpload(imgContent, uri);
                 onButtonClick_saveContents(v,userId, contentTitle, dateText, contentRate, contentText);
 
-
             }
         });
 

@@ -72,16 +72,16 @@ public class HomeActivity extends AppCompatActivity {
             int itemId = item.getItemId();
             // switch case is not working... But if conditions are...
             if (itemId == R.id.home) {
-                homeFragment = HomeFragment.newInstance(regUsername, regPassword, userId);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame_layout, homeFragment)
-                        .addToBackStack(null)
-                        .commit();
-                aTileFragment = ATileFragment.newInstance(userId, null);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame_layout, aTileFragment)
-                        .addToBackStack(null)
-                        .commit();
+//                homeFragment = HomeFragment.newInstance(regUsername, regPassword, userId);
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.frame_layout, homeFragment)
+//                        .addToBackStack(null)
+//                        .commit();
+//                aTileFragment = ATileFragment.newInstance(userId, null);
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.frame_layout, aTileFragment)
+//                        .addToBackStack(null)
+//                        .commit();
 
                 replaceFragment(new HomeFragment(userId), itemId);
             } else if (itemId == R.id.profile) {
