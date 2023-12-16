@@ -76,6 +76,23 @@ travel-journal-app/
 - **`data/`:** Includes code for data input and retrieval, Firebase integration, and API calls.
 - **`ui/`:** Manages the UI components and layout files.
 
+## Fireabase DB Structure
+
+The Database follows the following structure:
+
+```
+users
+  |--- userId
+        |--- journals
+              |--- journalId1
+                  |--- title: "My Amazing Trip"
+                  |--- date: "2023-12-13"
+                  |--- rate: 4.5
+                  |--- text: "This is a wonderful place..."
+              |--- journalId2
+                  |--- ...
+```
+
 ## Technologies Used
 
 - **Android Studio:** The official integrated development environment for Android app development.
