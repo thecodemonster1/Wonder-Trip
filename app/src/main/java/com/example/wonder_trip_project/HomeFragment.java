@@ -2,11 +2,13 @@ package com.example.wonder_trip_project;
 
 import static com.example.wonder_trip_project.Utils.showLog;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,8 +46,10 @@ import java.util.Objects;
  */
 public class HomeFragment extends Fragment {
 
-    private RecyclerView homeRecyclerView;
     private StorageReference storageRef;
+    private RecyclerView recyclerView;
+    private ArrayList<JournalModel> journalList;
+    private MyAdapter adapter;
     private DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
     private int i = 0;
 
@@ -99,120 +103,100 @@ public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-
-        homeRecyclerView = rootView.findViewById(R.id.homeRecycleView);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        homeRecyclerView.setLayoutManager(layoutManager);
-
-        FirebaseRecyclerOptions<JournalModel> options =
-                new FirebaseRecyclerOptions.Builder<JournalModel>()
-                        .setQuery(usersRef.child(userId).child("journals").getRef(), JournalModel.class) // userid for the first child
-                        .build();
-
-        homeRecyclerView.setAdapter(new MainAdapter(options));
-
-        showLog("journalId: " + usersRef.child(userId).getDatabase().getReference("journals").getRef().getKey());
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
 
-//        titleOf1 = rootView.findViewById(R.id.titleView_of_a_tile);
-//        titleOf1.setText();
-//        ArrayList<String> journalIds = new ArrayList<>();
-        usersRef.addValueEventListener(new ValueEventListener() {
+
+//        tileHandler(view);
+//        firebaseContentId(userId);
+//        editJournalOnButtonClick_Goto_add(view);
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        recyclerView = view.findViewById(R.id.homeRecycleView);
+        journalList = new ArrayList<>();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new MyAdapter(getContext(), journalList);
+        recyclerView.setAdapter(adapter);
+
+        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                     // Initialize your variables
-                    TextView titleOf1 = rootView.findViewById(R.id.titleView_of_a_tile);
                     String storedUsername = userSnapshot.child("username").getValue(String.class);
                     String storedPassword = userSnapshot.child("password").getValue(String.class);
 
-                    // Use an ArrayList of maps to store journal data
-                    List<Map<String, Object>> journalMaps = new ArrayList<>();
+                    // Access the user's journals
+                    DataSnapshot journalsSnapshot = userSnapshot.child("journals");
 
                     if (storedUsername.equals(regUsername) && storedPassword.equals(regPassword)) {
-                        userId = userSnapshot.getKey(); // Update user ID if found
-                        showLog("Username is " + storedUsername);
 
-                        for (DataSnapshot journalSnapshot: userSnapshot.child("journals").getChildren()){
-//                            String journalId = journalSnapshot.getKey();
-                            // Use a single map for each journal iteration
-                            Map<String, Object> journalMap = new HashMap<>();
+                        // Get the user ID
+//                        String userId = userSnapshot.getKey();
+                        showLog("userId: " + userId);
+                        // Loop through each journal
+//                        journalList.clear(); // Clear existing list before adding new items
+                        for (DataSnapshot journalSnapshot : journalsSnapshot.getChildren()) {
 
-                            // Retrieve journal data and extract values
-                            Map<String, Object> journalData = (Map<String, Object>) journalSnapshot.getValue();
-                            String title = (String) journalData.get("title");
-                            String date = (String) journalData.get("date");
-                            String rate = (String) journalData.get("rate");
-                            String text = (String) journalData.get("text");
+                            // Retrieve journal data
+                            String title = journalSnapshot.child("title").getValue(String.class);
+                            String date = journalSnapshot.child("date").getValue(String.class);
+                            String rate = journalSnapshot.child("rate").getValue(String.class);
 
-                            // Check for missing data (optional)
-//                            if (title == null || date == null || rate == null || text == null) {
-//                                // Handle missing data scenario (e.g., show error message)
-//                                continue;
-//                            }
+                            // Create a JournalModel object
+                            JournalModel journal = new JournalModel(title, date, rate);
 
-                            // Add extracted values to the map
-                            journalMap.put("title", title);
-                            journalMap.put("date", date);
-                            journalMap.put("rating", rate);
-                            journalMap.put("text", text);
+                            // Add the journal to your list
+                            journalList.add(journal);
 
-                            // Add the journal map to the list
-                            journalMaps.add(journalMap);
+//                            DatabaseReference journalRef = FirebaseDatabase.getInstance().getReference("users/"+userId+"/journals");
+                            showLog("journalId: "+ journalSnapshot.getKey());
+                            showLog("title: "+ title);
+                            showLog("date: "+ date);
+                            showLog("rate: "+ rate);
 
-//                            if (!journalMaps.get(0).isEmpty()){
-//                                showLog("Title is " + journalMaps.get(0).get("title"));
-//                            }
-                            // Clear the map for the next iteration
-                            journalMap.clear();
-
-                            // Use journal data for UI updates or other actions
-                            // ...your logic to handle multiple journals and call tileHandler...
 
                         }
+                        // Update your adapter with the updated journal list
+                        adapter.notifyDataSetChanged();
+                        break;
 
-                        // Set title of the first tile (optional)
-//                        if (!journalMaps.isEmpty()) {
-//                            titleOf1.setText((CharSequence) journalMaps);
-//                            if (!journalMaps.get(0).isEmpty()){
-//                                showLog("Title is " + journalMaps.get(0).get("title"));
-//                            }
+//                        for (DataSnapshot journalSnapshot: snapshot.child(userId).child("journals").getChildren()){
 //
-////                            showLog("JournalId is " + journalId);
-////                            showLog("Title is " + (String) journalMaps.get(0).get("title"));
-//                            // if this is working you can do whatever with journalId
-////                            tileHandler(rootView, );
+//                            String journalId = journalSnapshot.getKey();
+//                            homeRecyclerView = view.findViewById(R.id.homeRecycleView);
+//
+//                            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+//                            homeRecyclerView.setLayoutManager(layoutManager);
+//
+//                            FirebaseRecyclerOptions<JournalModel> options =
+//                                    new FirebaseRecyclerOptions.Builder<JournalModel>()
+//                                            .setQuery(usersRef.child(userId).child("journals").child(journalId), JournalModel.class)
+//                                            .build();
+//
+//                            homeRecyclerView.setAdapter(new MainAdapter(options));
+//                            showLog("journalId: " + journalSnapshot.getKey());
 //                        }
-
-
-//                        titleOf1.setText("Hell NO");
-//                        showLog("title1: "+journalIds.get(0));
-//                        imageRetrivalFunc(userId); // Download profile image
-//                        firebaseJournalId(userId, i);
-                        break; // Stop iterating after finding a match
                     }
+
                 }
-
-
-
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                showLog("Database Error: " + error.getMessage(), "e");
+
             }
         });
 
-//        tileHandler(rootView);
-//        firebaseContentId(userId);
-//        editJournalOnButtonClick_Goto_add(rootView);
-        return rootView;
     }
 
-//    private void tileHandler(@NonNull View rootView) {
+    //    private void tileHandler(@NonNull View rootView) {
 //        // Example: Set click listener for the first tile
 //        rootView.findViewById(R.id.title1).setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -302,35 +286,7 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void imageRetrivalFunc(String userId) {
-        storageRef = FirebaseStorage.getInstance().getReference("images/" + userId + ".jpg");
-        try {
-            File localFile = File.createTempFile(userId + "", ".jpg");
-            storageRef.getFile(localFile)
-                    .addOnSuccessListener(taskSnapshot -> { // Use lambda expressions for concise code
-                        Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-//                        homeFragmentTopBarProfileImage.setImageBitmap(bitmap);
-                    })
-                    .addOnFailureListener(e -> {
-                        if (e instanceof StorageException) {
-                            ((StorageException) e).getErrorCode();
-                        }
-                        showLog("Failed to retrieve image...");
-                    });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public void editJournalOnButtonClick_Goto_add(View view) {
-        view.findViewById(R.id.editContentFab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // pass the details of the journal to AddFragment
-            }
-        });
-//        replaceFragment(new AddFragment(userId), R.id.add);
-    }
 
     private void handleTileClick(String tileId) {
         // TODO: Retrieve data from Firebase based on tileId
@@ -338,7 +294,7 @@ public class HomeFragment extends Fragment {
 
         // Navigate to fragment_home_tile_view.xml with the fetched data
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, HomeTileViewFragment.newInstance(tileId, "Assalaamu alaikkum"));
+//        fragmentTransaction.replace(R.id.frame_layout, HomeTileViewFragment.newInstance(tileId, "Assalaamu alaikkum"));
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

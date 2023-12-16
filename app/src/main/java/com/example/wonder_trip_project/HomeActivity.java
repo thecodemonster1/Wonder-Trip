@@ -1,168 +1,86 @@
 package com.example.wonder_trip_project;
 
-import androidx.annotation.NonNull;
+import static com.example.wonder_trip_project.Utils.showLog;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.wonder_trip_project.databinding.ActivityHomeBinding;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
+import java.io.IOException;
 
 public class HomeActivity extends AppCompatActivity {
 
     ActivityHomeBinding binding;
     ImageView imgContent;
     String userId, regUsername, regPassword;
-    AddFragment addFragment;
-    HomeFragment homeFragment;
-    ATileFragment aTileFragment;
-    RecyclerView homeRecycleView;
-    MainAdapter mainAdapter;
-
-
-
+    StorageReference storageRef;
     DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
+
 
 //    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        homeRecycleView = findViewById(R.id.homeRecycleView);
-        binding = ActivityHomeBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-//        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_main);
 
-//        RecyclerView homeRecycleView = findViewById(R.id.homeRecycleView);
-////        homeRecycleView = findViewById(R.id.homeRecycleView);
-//        homeRecycleView.setLayoutManager(new LinearLayoutManager(this));
 
         Intent intent = getIntent();
         userId = intent.getStringExtra("userId");
         regUsername = intent.getStringExtra("regUsername");
         regPassword = intent.getStringExtra("regPassword");
 
-//        FirebaseRecyclerOptions<JournalModel> options =
-//                new FirebaseRecyclerOptions.Builder<JournalModel>()
-//                        .setQuery(usersRef.child("-NlWDdvKWRPdCZMBTRcZ").child("journals"), JournalModel.class) // userid for the first child
-//                        .build();
-//
-//        mainAdapter = new MainAdapter(options);
-//        homeRecycleView.setAdapter(mainAdapter);
-
-        homeFragment = HomeFragment.newInstance(regUsername, regPassword, userId);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_layout, homeFragment)
-                .addToBackStack(null)
-                .commit();
-
-//        aTileFragment = ATileFragment.newInstance(userId, null);
-//        getSupportFragmentManager().beginTransaction()
-//                .replace(R.id.frame_layout, aTileFragment)
-//                .addToBackStack(null)
-//                .commit();
-
-        replaceFragment(new HomeFragment(userId), R.id.home);
+        addJournal_btn();
+        viewJournal_btn(userId);
+        profile_btn();
+        settings_btn();
 
 
 
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
-            int itemId = item.getItemId();
-            // switch case is not working... But if conditions are...
-            if (itemId == R.id.home) {
-//                homeFragment = HomeFragment.newInstance(regUsername, regPassword, userId);
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.frame_layout, homeFragment)
-//                        .addToBackStack(null)
-//                        .commit();
-//                aTileFragment = ATileFragment.newInstance(userId, null);
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.frame_layout, aTileFragment)
-//                        .addToBackStack(null)
-//                        .commit();
 
-                replaceFragment(new HomeFragment(userId), itemId);
-            } else if (itemId == R.id.profile) {
-                replaceFragment(new ProfileFragment(), itemId);
-            } else if (itemId == R.id.add) {
-                addFragment = AddFragment.newInstance("username", userId);
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.frame_layout, addFragment)
-                        .addToBackStack(null)
-                        .commit();
-                replaceFragment(new AddFragment(userId), itemId);
-            } else if (itemId == R.id.settings) {
-                replaceFragment(new SettingsFragment(), itemId);
-            }
 
-            return true;
-        });
 
     }
 
 
-    private void replaceFragment(Fragment fragment, int itemId) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
 
-        binding.bottomNavigationView.getMenu().findItem(itemId).setChecked(true);
-    }
+    private void imageRetrivalFunc(String userId) {
+        storageRef = FirebaseStorage.getInstance().getReference("images/" + userId + ".jpg");
+        try {
+            File localFile = File.createTempFile(userId + "", ".jpg");
+            storageRef.getFile(localFile)
+                    .addOnSuccessListener(taskSnapshot -> { // Use lambda expressions for concise code
+                        Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+//                        homeFragmentTopBarProfileImage.setImageBitmap(bitmap);
+                    })
+                    .addOnFailureListener(e -> {
+                        if (e instanceof StorageException) {
+                            ((StorageException) e).getErrorCode();
+                        }
+                        showLog("Failed to retrieve image...");
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
-    public void onLayoutClick_goto_view_tile(View view) {
-        replaceFragment(new HomeTileViewFragment(), R.id.home);
-    }
 
-    public void saveSettingsFab_Action(View view){
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
-    }
-
-    public void onImageClick_addImage(View view){
-        ImagePicker.with(HomeActivity.this)
-                .crop()	    			//Crop image(Optional), Check Customization for more option
-                .compress(1024)			//Final image size will be less than 1 MB(Optional)
-                .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                .start();
-    }
-
-//    public void onButtonClick_saveContents(View view) {
-//        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        startActivityForResult(intent, 1);
-//        Log.d("MyApp", "Working Save Content FAB");
-//
-//    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-//        imgContent = findViewById(R.id.imgContent);
+        //        imgContent = findViewById(R.id.imgContent);
 //
 //        FirebaseStorage storage = FirebaseStorage.getInstance();
 //        StorageReference storageRef = storage.getReference();
@@ -205,5 +123,42 @@ public class HomeActivity extends AppCompatActivity {
 //        }
     }
 
+//    public void editJournalOnButtonClick_Goto_add() {
+//        findViewById(R.id.editContentFab).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick() {
+//                // pass the details of the journal to AddFragment
+//            }
+//        });
+////        replaceFragment(new AddFragment(userId), R.id.add);
+//    }
 
+
+    public void onLayoutClick_goto_view_tile(View view) {
+//        replaceFragment(new HomeTileViewFragment(), R.id.home);
+    }
+
+    public void saveSettingsFab_Action(View view){
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+    }
+
+    private void addJournal_btn(){
+
+    }
+
+    private void viewJournal_btn(String userId) {
+        Intent i = new Intent(getApplicationContext(), ViewActivity.class);
+        i.putExtra("userId", userId);
+        startActivity(i);
+    }
+
+    private void profile_btn(){
+
+    }
+
+
+
+    public void settings_btn() {
+    }
 }

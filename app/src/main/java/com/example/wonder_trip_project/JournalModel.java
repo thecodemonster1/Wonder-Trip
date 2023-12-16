@@ -1,8 +1,12 @@
 package com.example.wonder_trip_project;
 
+
+import com.google.firebase.database.IgnoreExtraProperties;
+
+@IgnoreExtraProperties
 public class JournalModel {
 
-    String title, date, rate;
+    private String title, date, rate;
 //    text
 
     public JournalModel() {

@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView3ActivityMain;
     ActivityMainBinding binding;
     HomeFragment homeFragment;
-    AddFragment addFragment;
+
 
     // Get a reference to the "users" node in the database
     DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");

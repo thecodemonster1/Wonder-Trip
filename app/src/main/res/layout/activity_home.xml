@@ -5,27 +5,181 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeActivity">
+    tools:context=".HomeActivity"
+    android:background="#FFE2B1">
 
-  <FrameLayout
-      android:id="@+id/frame_layout"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+  <TextView
+      android:id="@+id/textView4"
+      android:layout_width="392dp"
+      android:layout_height="92dp"
+      app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent">
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="0.0"
+      android:text="HELLO"
+      android:textSize="35sp"
+      android:textAlignment="center"
+      android:gravity="center" />
 
-  </FrameLayout>
-
-  <com.google.android.material.bottomnavigation.BottomNavigationView
-      android:id="@+id/bottomNavigationView"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+  <GridLayout
+      android:layout_width="396dp"
+      android:layout_height="637dp"
+      android:paddingTop="100dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
-      app:menu="@menu/bottom_nav_menu"/>
+      app:layout_constraintTop_toBottomOf="@+id/textView4"
+      app:layout_constraintVertical_bias="0.0">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="0"
+        android:layout_column="0"
+        android:layout_margin="20dp"
+        android:elevation="10dp"
+        android:focusable="true"
+        android:gravity="center"
+        app:cardBackgroundColor="@color/spetia"
+        android:linksClickable="true"
+        android:onClick="addJournal_btn"
+        android:orientation="vertical"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="18dp">
+
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/baseline_add_24" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Add Journal"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="0"
+        android:layout_column="1"
+        android:layout_margin="20dp"
+        android:elevation="10dp"
+        android:focusable="true"
+        android:gravity="center"
+        android:linksClickable="true"
+        android:onClick="viewJournal_btn"
+        android:orientation="vertical"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="18dp">
+
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/baseline_view_agenda_24" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="View Journal"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="1"
+        android:layout_column="0"
+        android:layout_margin="20dp"
+        android:elevation="10dp"
+        android:focusable="true"
+        android:gravity="center"
+        android:linksClickable="true"
+        android:onClick="profile_btn"
+        android:orientation="vertical"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="18dp">
+
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/baseline_person_24" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Profile"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_row="1"
+        android:layout_column="1"
+        android:layout_margin="20dp"
+        android:elevation="10dp"
+        android:focusable="true"
+        android:gravity="center"
+        android:linksClickable="true"
+        android:onClick="settings_btn"
+        android:orientation="vertical"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="18dp">
+
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/baseline_settings_24" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Settings"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+      </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+  </GridLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

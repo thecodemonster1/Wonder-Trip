@@ -38,7 +38,7 @@ public class MainAdapter extends FirebaseRecyclerAdapter<JournalModel,MainAdapte
     @NonNull
     @Override
     public myViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_tile, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_a_tile, parent, false);
         return new myViewHolder(view);
     }
 
@@ -49,10 +49,14 @@ public class MainAdapter extends FirebaseRecyclerAdapter<JournalModel,MainAdapte
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            title = (TextView) itemView.findViewById(R.id.titleView_of_a_tile);
-            date = (TextView) itemView.findViewById(R.id.dateView_of_a_tile);
-            rate = (TextView) itemView.findViewById(R.id.rateView_of_a_tile);
+//            title = (TextView) itemView.findViewById(R.id.titleView_of_a_tile);
+//            date = (TextView) itemView.findViewById(R.id.dateView_of_a_tile);
+//            rate = (TextView) itemView.findViewById(R.id.rateView_of_a_tile);
 //            text = (TextView) itemView.findViewById(R.id.);
+
+            title = (TextView) itemView.findViewById(R.id.titleText);
+            date = (TextView) itemView.findViewById(R.id.dateText);
+            rate = (TextView) itemView.findViewById(R.id.rateText);
         }
     }
 }
