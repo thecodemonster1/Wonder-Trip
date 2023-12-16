@@ -46,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
     EditText txtUsername, txtPassword;
     Button btnLogIn;
     ImageView imageView3ActivityMain;
-    ActivityMainBinding binding;
-    HomeFragment homeFragment;
 
 
     // Get a reference to the "users" node in the database
@@ -55,9 +53,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-//        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
         txtUsername = findViewById(R.id.txtUsername);
         txtPassword = findViewById(R.id.txtPassword);
@@ -105,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (username.isEmpty() || password.isEmpty()){
                                     showToast(getApplicationContext(),"Can't LogIn Field(s) are empty");
                                 }else{
-                                    Toast.makeText(getApplicationContext(), "Loggedin as "+username, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Welcome "+username, Toast.LENGTH_SHORT).show();
                                     showLog("UserId_On_LogIn if Working: "+userId);
 
                                     Intent intent = new Intent(getApplicationContext(), HomeActivity.class);

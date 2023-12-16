@@ -13,7 +13,7 @@
         android:roundIcon="@drawable/logoicon"
         android:supportsRtl="true"
         android:theme="@style/Theme.WonderTripProject"
-        tools:targetApi="31">
+        tools:targetApi="30">
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />
@@ -22,9 +22,9 @@
             android:exported="false" />
         <activity
             android:name=".AddActivity"
-            android:exported="false" /> <!-- android:name=".MainActivity2" -->
+            android:exported="false" /> <!-- android:name=".ViewActivity" -->
         <activity
-            android:name=".SplashActivity"
+            android:name=".ViewActivity"
             android:exported="false" /> <!-- android:name=".HomeActivity" -->
         <activity
             android:name=".HomeActivity"
@@ -36,7 +36,7 @@
             android:name=".MainActivity"
             android:exported="false" /> <!-- android:name=".SplashActivity" -->
         <activity
-            android:name=".ViewActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -29,8 +29,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="373dp"
                     android:clickable="true"
-                    android:id="@+id/imgContent"
-                    android:onClick="onImageClick_addImage"
+                    android:id="@+id/imgContentJournal"
+
                     android:src="@drawable/baseline_add_photo_alternate_24" />
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -58,6 +58,7 @@
                         android:layout_marginTop="2dp"
                         android:layout_marginStart="15dp"
                         android:hint="Pick a Date"
+                        android:clickable="true"
                         android:id="@+id/dateTextView"/>
 
                     <ImageView
@@ -71,7 +72,9 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="150dp">
+                        android:clickable="true"
+                        android:layout_marginStart="150dp"
+                        android:id="@+id/rateLinearLayout">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -85,7 +88,9 @@
 
                         <ImageView
                             android:layout_width="wrap_content"
+                            android:id="@+id/imgContentRate"
                             android:layout_height="wrap_content"
+                            android:clickable="true"
                             android:src="@drawable/baseline_star_24" />
                     </LinearLayout>
 
@@ -108,7 +113,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:hint="This is a sample text"
+                    android:hint="How about your journey"
                     android:id="@+id/txtContentText"
                     android:textAlignment="gravity"
                     android:ems="10"

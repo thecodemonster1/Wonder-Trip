@@ -45,7 +45,7 @@ public class ViewActivity extends AppCompatActivity {
         userId = intent.getStringExtra("userId");
 
         showLog("(Out)userId: "+userId);
-        retriveJournals("-Nl4N9BTlJb7Ycc-l3X8"); // "-Nl4N9BTlJb7Ycc-l3X8"
+        retriveJournals(userId); // "-Nl4N9BTlJb7Ycc-l3X8"
 
 
 

@@ -1,16 +1,21 @@
 package com.example.wonder_trip_project;
 
 import static com.example.wonder_trip_project.Utils.showLog;
+import static com.example.wonder_trip_project.Utils.showToast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.wonder_trip_project.databinding.ActivityHomeBinding;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -25,7 +30,7 @@ import java.io.IOException;
 
 public class HomeActivity extends AppCompatActivity {
 
-    ActivityHomeBinding binding;
+
     ImageView imgContent;
     String userId, regUsername, regPassword;
     StorageReference storageRef;
@@ -36,7 +41,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
 
 
         Intent intent = getIntent();
@@ -44,18 +49,51 @@ public class HomeActivity extends AppCompatActivity {
         regUsername = intent.getStringExtra("regUsername");
         regPassword = intent.getStringExtra("regPassword");
 
-        addJournal_btn();
-        viewJournal_btn(userId);
-        profile_btn();
-        settings_btn();
+        findViewById(R.id.addJournal).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), AddActivity.class);
+                i.putExtra("userId", userId);
+                startActivity(i);
+                showToast(getApplicationContext(), "You Clicked addJournal");
+            }
+        });
 
+        findViewById(R.id.viewJournal).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), ViewActivity.class);
+                i.putExtra("userId", userId);
+                startActivity(i);
+                showToast(getApplicationContext(), "You Clicked viewJournal");
+            }
+        });
 
+        findViewById(R.id.profile).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                i.putExtra("userId", userId);
+                startActivity(i);
+                showToast(getApplicationContext(), "You Clicked profile");
+            }
+        });
 
-
-
+        findViewById(R.id.settings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
+                i.putExtra("userId", userId);
+                startActivity(i);
+                showToast(getApplicationContext(), "You Clicked settings");
+            }
+        });
 
 
     }
+
+
+
 
 
 
@@ -143,22 +181,5 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void addJournal_btn(){
 
-    }
-
-    private void viewJournal_btn(String userId) {
-        Intent i = new Intent(getApplicationContext(), ViewActivity.class);
-        i.putExtra("userId", userId);
-        startActivity(i);
-    }
-
-    private void profile_btn(){
-
-    }
-
-
-
-    public void settings_btn() {
-    }
 }

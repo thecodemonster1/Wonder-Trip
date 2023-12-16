@@ -24,8 +24,9 @@
       android:gravity="center" />
 
   <GridLayout
-      android:layout_width="396dp"
+      android:layout_width="392dp"
       android:layout_height="637dp"
+      android:foregroundGravity="fill"
       android:paddingTop="100dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
@@ -35,18 +36,18 @@
       app:layout_constraintVertical_bias="0.0">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/addJournal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_row="0"
         android:layout_column="0"
-        android:layout_margin="20dp"
+        android:layout_margin="25dp"
         android:elevation="10dp"
         android:focusable="true"
         android:gravity="center"
-        app:cardBackgroundColor="@color/spetia"
         android:linksClickable="true"
-        android:onClick="addJournal_btn"
         android:orientation="vertical"
+        app:cardBackgroundColor="@color/spetia"
         app:cardCornerRadius="20dp"
         app:cardElevation="18dp">
 
@@ -72,16 +73,16 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/viewJournal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_row="0"
         android:layout_column="1"
-        android:layout_margin="20dp"
+        android:layout_margin="25dp"
         android:elevation="10dp"
         android:focusable="true"
         android:gravity="center"
         android:linksClickable="true"
-        android:onClick="viewJournal_btn"
         android:orientation="vertical"
         app:cardCornerRadius="20dp"
         app:cardElevation="18dp">
@@ -108,16 +109,16 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_row="1"
         android:layout_column="0"
-        android:layout_margin="20dp"
+        android:layout_margin="25dp"
         android:elevation="10dp"
         android:focusable="true"
         android:gravity="center"
         android:linksClickable="true"
-        android:onClick="profile_btn"
         android:orientation="vertical"
         app:cardCornerRadius="20dp"
         app:cardElevation="18dp">
@@ -144,16 +145,16 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/settings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_row="1"
         android:layout_column="1"
-        android:layout_margin="20dp"
+        android:layout_margin="25dp"
         android:elevation="10dp"
         android:focusable="true"
         android:gravity="center"
         android:linksClickable="true"
-        android:onClick="settings_btn"
         android:orientation="vertical"
         app:cardCornerRadius="20dp"
         app:cardElevation="18dp">
