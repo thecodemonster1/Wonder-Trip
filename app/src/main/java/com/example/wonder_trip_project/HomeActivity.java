@@ -175,11 +175,4 @@ public class HomeActivity extends AppCompatActivity {
     public void onLayoutClick_goto_view_tile(View view) {
 //        replaceFragment(new HomeTileViewFragment(), R.id.home);
     }
-
-    public void saveSettingsFab_Action(View view){
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
-    }
-
-
 }

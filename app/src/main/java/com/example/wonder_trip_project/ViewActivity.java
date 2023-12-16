@@ -45,7 +45,7 @@ public class ViewActivity extends AppCompatActivity {
         userId = intent.getStringExtra("userId");
 
         showLog("(Out)userId: "+userId);
-        retriveJournals(userId); // "-Nl4N9BTlJb7Ycc-l3X8"
+        retriveJournalsForListView(userId); // "-Nl4N9BTlJb7Ycc-l3X8"
 
 
 
@@ -53,7 +53,7 @@ public class ViewActivity extends AppCompatActivity {
     }
 
 
-    private void retriveJournals(String userId){
+    private void retriveJournalsForListView(String userId){
         // In your onDataChange method, access all journals under the user ID:
 
         FirebaseDatabase.getInstance().getReference("users/"+userId+"/journals").addListenerForSingleValueEvent(new ValueEventListener() {
