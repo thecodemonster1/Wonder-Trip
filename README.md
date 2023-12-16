@@ -36,8 +36,8 @@ To get started with the Travel Journal App, follow these steps:
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/your-username/travel-journal-app.git
-   cd travel-journal-app
+   git clone https://github.com/thecodemonster1/Wonder-Trip.git
+   cd Wonder-Trip
    ```
 
 2. **Set Up Firebase:**
