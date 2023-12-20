@@ -55,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), AddActivity.class);
                 i.putExtra("userId", userId);
                 startActivity(i);
-                showToast(getApplicationContext(), "You Clicked addJournal");
+//                showToast(getApplicationContext(), "You Clicked addJournal");
             }
         });
 
@@ -65,7 +65,7 @@ public class HomeActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), ViewActivity.class);
                 i.putExtra("userId", userId);
                 startActivity(i);
-                showToast(getApplicationContext(), "You Clicked viewJournal");
+//                showToast(getApplicationContext(), "You Clicked viewJournal");
             }
         });
 
@@ -75,7 +75,7 @@ public class HomeActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
                 i.putExtra("userId", userId);
                 startActivity(i);
-                showToast(getApplicationContext(), "You Clicked profile");
+//                showToast(getApplicationContext(), "You Clicked profile");
             }
         });
 
@@ -85,7 +85,7 @@ public class HomeActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), SettingsActivity.class);
                 i.putExtra("userId", userId);
                 startActivity(i);
-                showToast(getApplicationContext(), "You Clicked settings");
+//                showToast(getApplicationContext(), "You Clicked settings");
             }
         });
 
@@ -171,8 +171,4 @@ public class HomeActivity extends AppCompatActivity {
 ////        replaceFragment(new AddFragment(userId), R.id.add);
 //    }
 
-
-    public void onLayoutClick_goto_view_tile(View view) {
-//        replaceFragment(new HomeTileViewFragment(), R.id.home);
-    }
 }

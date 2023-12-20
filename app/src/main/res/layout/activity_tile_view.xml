@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/homeTileView"
-    tools:context=".HomeTileViewFragment">
-
+    tools:context=".TileViewActivity">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".AddFragment">
-
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -59,6 +55,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:id="@+id/rateTextView"
                             android:text="5.0"
                             android:layout_marginTop="2dp"/>
                         <ImageView
@@ -70,6 +67,7 @@
 
                 <TextView
                     android:layout_width="match_parent"
+                    android:id="@+id/journalTextView"
                     android:layout_height="wrap_content"
                     android:text="@string/dummyText"
                     android:textAlignment="gravity"
@@ -96,5 +94,5 @@
         app:srcCompat="@drawable/baseline_edit_24"
         android:focusable="true"
         android:contentDescription="@string/todo" />
-<!--    android:onClick="onButtonClick_Goto_add"-->
+
 </RelativeLayout>
