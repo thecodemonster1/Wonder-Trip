@@ -6,8 +6,12 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class JournalModel {
 
-    private String title, date, rate, journal, journalId;
-//    text
+    private String title;
+    private String date;
+    private String rate;
+    private String journal;
+    private String journalId;
+    private String srcImageJournal;
 
     public JournalModel() {
     }
@@ -23,9 +27,17 @@ public class JournalModel {
         this.journalId = journalId;
     }
 
-    public JournalModel(String title, String date, String rate,String journalId,  String journal) {
+    public JournalModel(String title, String date, String rate,String journalId, String srcImageJournal) {
         this(title, date, rate, journalId);
-        this.journal = journal;
+        this.srcImageJournal = srcImageJournal;
+    }
+
+    public String getSrcImageJournal() {
+        return srcImageJournal;
+    }
+
+    public void setSrcImageJournal(String srcImageJournal) {
+        this.srcImageJournal = srcImageJournal;
     }
 
     public String getTitle() {

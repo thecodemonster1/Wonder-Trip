@@ -39,7 +39,10 @@ public class AddActivity extends AppCompatActivity {
     FloatingActionButton saveContentBtn;
     TextInputEditText txtContentTitle, txtContentText;
     String contentTitle, dateText, contentRate, contentText, userId;
+    String journalId;
+    Uri imageUri;
     DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference journalsRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,9 @@ public class AddActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         userId = intent.getStringExtra("userId");
+        journalsRef = rootRef.child("users").child(userId).child("journals");
+        journalId = journalsRef.push().getKey();
+
 
         // Initialize views
         datePicker = findViewById(R.id.datePicker);
@@ -61,27 +67,24 @@ public class AddActivity extends AppCompatActivity {
         imgContentRate = findViewById(R.id.imgContentRate);
         imgContentJournal = findViewById(R.id.imgContentJournal);
 
+//        if (imgContentJournal != null, imageUri != null, userId != null, journalsRef != null, journalId != null){
+//            imageUpload(imgContentJournal, imageUri, userId, journalsRef, journalId);
+//        }
         setDatePicker();
         setRateNumberPicker();
-        saveContents(userId);
+//        saveContents(userId, journalsRef, journalId);
         onImageClick_addImage();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ImagePicker.REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                Uri imageUri = data.getData();
-                Glide.with(this)
-                        .load(imageUri)
-                        .into(imgContentJournal);
-                // Set the image to the ImageView using the URI
-                imgContentJournal.setImageURI(imageUri);
-            } else {
-                // Handle error or cancellation
-                showToast(this, "Image selection failed.");
-            }
+        if (requestCode == ImagePicker.REQUEST_CODE && resultCode == RESULT_OK) {
+            imageUri = data.getData();
+            imageUpload(imgContentJournal, imageUri, userId, journalsRef, journalId);
+//            imageUpload(imgContentJournal, imageUri, userId, journalsRef, journalId);
+        } else {
+            showToast(this, "Image selection failed.");
         }
     }
 
@@ -168,7 +171,7 @@ public class AddActivity extends AppCompatActivity {
 
     private void setRateNumberPicker(){
 
-        txtContentRate.setText("5.0");
+        txtContentRate.setText("1.0");
         imgContentRate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -231,7 +234,37 @@ public class AddActivity extends AppCompatActivity {
         });
     }
 
-    private void saveContents(String userId){
+    public void imageUpload(@NonNull ImageView imgContent, Uri uri, String userId, DatabaseReference journalsRef, String journalId) {
+        // Set the image to the ImageView
+
+        Glide.with(this)
+                .load(uri)
+                .into(imgContent);
+
+
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        String imageName = ("Journal_" + userId + ".jpg");
+        StorageReference imageRef = storageRef.child("images/journals/" + imageName);
+
+        UploadTask uploadTask = imageRef.putFile(uri);
+
+        saveContents(userId, journalsRef, journalId, uploadTask, imageRef, imgContent);
+    }
+
+    private void saveContents(String userId, DatabaseReference journalsRef, String journalId, UploadTask uploadTask, StorageReference imageRef, ImageView imgContent){
+
+        // Handle upload progress
+        uploadTask.addOnProgressListener(taskSnapshot -> {
+            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+            int progressInt = (int) progress;
+            if (progressInt == 100){
+                showToast(getApplicationContext(), "Image uploaded successfully");
+            }
+            showLog("Upload progress: " + progressInt + "%");
+        });
+
         saveContentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -241,27 +274,13 @@ public class AddActivity extends AppCompatActivity {
                 contentRate = txtContentRate.getText().toString();
                 contentText = txtContentText.getText().toString();
 
-//                imageUpload(imgContent, uri);
                 // Check if userId is not null
                 if (userId != null) {
-//                    showLog("AddFragment_userId_from onCreateView_inside if() : "+ userId);
-                    // Update the reference to the correct location in the database
-                    DatabaseReference journalsRef = rootRef.child("users").child(userId).child("journals");
-
-                    // Use push() to generate a unique key for the new journal entry
-                    String journalId = journalsRef.push().getKey();
-
-//                    homeFragment = HomeFragment.newInstance()
-
                     // Create a new entry in the "journals" node under the specific user
                     journalsRef.child(journalId).child("title").setValue(contentTitle);
                     journalsRef.child(journalId).child("text").setValue(contentText);
                     journalsRef.child(journalId).child("date").setValue(dateText);
                     journalsRef.child(journalId).child("rate").setValue(contentRate);
-
-
-
-
 
                     showLog("if input fields are working, "+
                             "\nuserId: " + userId +
@@ -270,58 +289,32 @@ public class AddActivity extends AppCompatActivity {
                             "\ncontentRate: " + contentRate +
                             "\ncontentText: " + contentText);
 
+                    // Handle upload completion
+                    uploadTask.addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            // Image uploaded successfully
+                            imageRef.getDownloadUrl().addOnSuccessListener(uri2 -> {
+                                {
+                                    String downloadUrl = uri2.toString();
+                                    // Save the download URL in the database under the journal entry
+                                    journalsRef.child(journalId).child("imageUrl").setValue(downloadUrl);
+                                }
+                            });
+                        } else {
+                            // Handle upload failure
+                            showToast(getApplicationContext(),"Image upload failed: " + task.getException());
+                        }
+                    });
+
                 } else {
                     // Handle the case where userId is null
                     showLog("userId is null", "e");
                 }
 
-//        Log.d("MyApp", "Title: "+title+"\nJournal Text: "+journal);
-                Log.d("MyApp", "Working Save Content FAB");
+                showToast(getApplicationContext(),"You successfull save the contents");
 
             }
         });
-    }
-
-    public void imageUpload(@NonNull ImageView imgContent, Uri uri, String userId) {
-        // Assuming you have received the Uri as a parameter instead of relying on the global 'data' object
-
-        // Set the image to the ImageView
-        imgContent.setImageURI(uri);
-
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
-
-        Log.d("MyApp", "userID: " + userId);
-
-        // Use a unique identifier for each image, e.g., user's UID or a random string
-        String imageName = ("Journal_" + userId + ".jpg");
-        StorageReference imageRef = storageRef.child("images/journals/" + imageName);
-
-        UploadTask uploadTask = imageRef.putFile(uri);
-
-        uploadTask.addOnProgressListener(taskSnapshot -> {
-            // Calculate the progress percentage
-            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-
-            // Update your UI or log the progress
-            // For example, update a progress bar
-            int progressInt = (int) progress;
-            Log.d("MyApp", "Upload progress: " + progressInt + "%");
-        });
-
-        uploadTask.addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                // Image upload successful
-                Log.d("MyApp", "Image is uploaded");
-            } else {
-                // Image upload failed
-                Log.e("MyApp", "Image upload failed: " + task.getException());
-            }
-        });
-
-        // Call this method from your fragment passing the required parameters
-        // For example, in your fragment code:
-        // imageUpload(imgContent, uri);
     }
 
     public void onImageClick_addImage(){

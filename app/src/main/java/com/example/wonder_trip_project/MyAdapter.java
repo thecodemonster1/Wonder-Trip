@@ -1,18 +1,18 @@
 package com.example.wonder_trip_project;
 
-import static android.content.Intent.getIntent;
-
 import static com.example.wonder_trip_project.Utils.showLog;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -67,6 +67,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             }
         });
 
+        String imgUri = journal.getSrcImageJournal();
+        if (imgUri != null) {
+            Glide.with(context)
+                    .load(imgUri) // Load image from Firebase Storage
+                    .into(holder.imageUri);
+        } else {
+            // Handle the case where there's no image
+            holder.imageUri.setImageDrawable(null);
+        }
+
 // You can also bind other data from your JournalModel object to other views.
 
     }
@@ -79,6 +89,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         TextView title, date, rate;
+        ImageView imageUri;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -89,6 +100,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             title = itemView.findViewById(R.id.titleText);
             date = itemView.findViewById(R.id.dateText);
             rate = itemView.findViewById(R.id.rateText);
+            imageUri = itemView.findViewById(R.id.imageView_of_a_tile);
         }
     }
 }

@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,6 +19,7 @@ public class TileViewActivity extends AppCompatActivity {
 
     String userId, journalId, date, rate, title, text;
     TextView titleBox, dateBox, rateBox, textBox;
+    FloatingActionButton editButton;
     DatabaseReference journalRef;
 
     @Override
@@ -28,6 +31,7 @@ public class TileViewActivity extends AppCompatActivity {
         dateBox = findViewById(R.id.dateTextView);
         rateBox = findViewById(R.id.rateTextView);
         textBox = findViewById(R.id.journalTextView);
+        editButton = findViewById(R.id.editContentFab);
 
         Intent intent = getIntent();
         userId = intent.getStringExtra("userId");
@@ -42,10 +46,18 @@ public class TileViewActivity extends AppCompatActivity {
                 rate = snapshot.child("rate").getValue(String.class);
                 text = snapshot.child("text").getValue(String.class);
 
+
                 titleBox.setText(title);
                 dateBox.setText(date);
                 rateBox.setText(rate);
                 textBox.setText(text);
+
+                editButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+//                        editJournalBtn(title, date, rate, text);
+                    }
+                });
             }
 
             @Override
@@ -53,6 +65,16 @@ public class TileViewActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    public void editJournalBtn(String title, String date, String rate, String text){
+        Intent intent = new Intent(getApplicationContext(), AddActivity.class);
+        intent.putExtra("title", title);
+        intent.putExtra("date", date);
+        intent.putExtra("rate", rate);
+        intent.putExtra("text", text);
+        startActivity(intent);
 
     }
 }

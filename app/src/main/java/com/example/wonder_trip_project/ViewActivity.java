@@ -10,7 +10,6 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,10 +46,6 @@ public class ViewActivity extends AppCompatActivity implements MyAdapter.OnJourn
         adapter = new MyAdapter(this, journalList, this, userId);
         recyclerView.setAdapter(adapter);
 
-
-
-
-        showLog("(Out)userId: "+userId);
         retriveJournalsForListView(userId); // "-Nl4N9BTlJb7Ycc-l3X8"
 
 
@@ -64,18 +59,19 @@ public class ViewActivity extends AppCompatActivity implements MyAdapter.OnJourn
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                showLog("userId: " + userId);
+//                showLog("userId: " + userId);
                 for (DataSnapshot journalSnapshot : snapshot.getChildren()) {
 
                     // Retrieve journal data
                     String title = journalSnapshot.child("title").getValue(String.class);
                     String date = journalSnapshot.child("date").getValue(String.class);
                     String rate = journalSnapshot.child("rate").getValue(String.class);
+                    String imgUri = journalSnapshot.child("imageUrl").getValue(String.class);
 
                     journalId = journalSnapshot.getKey();
 
                     // Create a JournalModel object
-                    JournalModel journal = new JournalModel(title, date, rate, journalId);
+                    JournalModel journal = new JournalModel(title, date, rate, journalId, imgUri);
 
                     // Add the journal to your list
                     journalList.add(journal);
