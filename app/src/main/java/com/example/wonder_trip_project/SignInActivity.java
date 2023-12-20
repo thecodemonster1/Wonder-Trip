@@ -3,11 +3,15 @@ package com.example.wonder_trip_project;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +25,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -29,10 +34,11 @@ import com.google.firebase.storage.UploadTask;
 import java.util.Objects;
 
 public class SignInActivity extends AppCompatActivity {
-    EditText txtUsername, txtEmail, txtPassword, txtPassword2, txtDOB;
+    EditText txtUsername, txtEmail, txtPassword, txtPassword2, txtDOB, txtPhoneNum;
     Button btnSignUp;
     ImageView imgProfileView;
     FloatingActionButton btnImagePicker;
+    String message;
 
 //    FirebaseAuth mAuth;
 //    ProgressBar progBar;
@@ -58,6 +64,7 @@ public class SignInActivity extends AppCompatActivity {
         btnSignUp = findViewById(R.id.btnSignUp);
         imgProfileView = findViewById(R.id.imgView);
         btnImagePicker = findViewById(R.id.btnImagePicker);
+        txtPhoneNum = findViewById(R.id.txtPhoneNum);
 //        progBar = findViewById(R.id.progressBar);
 
 //=================================Input Fields (End)=================================
@@ -72,6 +79,7 @@ public class SignInActivity extends AppCompatActivity {
                 String password = txtPassword.getText().toString();
                 String password2 = txtPassword2.getText().toString();
                 String dob = txtDOB.getText().toString();
+                String phone = "+94"+txtPhoneNum.getText().toString();
 //        progBar.setVisibility(View.VISIBLE);
 //=================================Input Variables (End)=================================
 
@@ -87,7 +95,7 @@ public class SignInActivity extends AppCompatActivity {
                         usersRef.child(userId).child("email").setValue(email);
                         usersRef.child(userId).child("password").setValue(password);
                         usersRef.child(userId).child("dob").setValue(dob);
-
+                        usersRef.child(userId).child("phone").setValue(phone);
 
                         showLog("UserId: "+userId);
                         Toast.makeText(SignInActivity.this, "userID: "+userId, Toast.LENGTH_SHORT).show();
@@ -97,6 +105,16 @@ public class SignInActivity extends AppCompatActivity {
                     }
                 }else{
                     Toast.makeText(SignInActivity.this, "You missed on or more field to fill", Toast.LENGTH_SHORT).show();
+                }
+
+                if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(SignInActivity.this, new String[]{android.Manifest.permission.SEND_SMS}, 1);
+                } else {
+                    // send message
+                    message = "Assalaamu alaikkum, world";
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(phone, null, message, null, null);
+                    showLog("Phone: "+phone+", Message: "+message);
                 }
 
             }
@@ -171,5 +189,18 @@ public class SignInActivity extends AppCompatActivity {
 
     public void showLog(String msg){
         Log.d("MyApp", msg);
+    }
+
+    public void welcomeMessage(){
+        // Get Firebase Messaging instance
+        FirebaseMessaging messaging = FirebaseMessaging.getInstance();
+
+        // Set Firebase Messaging sender ID (replace with your server key)
+//        messaging.setFirebaseMessagingSenderId("BA1uRy74CP_EAmtYWu5Ou82OC61y5bz7PoW284BZwHmG0pI6lhNth3h3Wi69MIcqR16KGTub0FGiHMNgAkKhhaI");
+//        messaging.setFirebaseMessagingSenderId("BA1uRy74CP_EAmtYWu5Ou82OC61y5bz7PoW284BZwHmG0pI6lhNth3h3Wi69MIcqR16KGTub0FGiHMNgAkKhhaI");
+
+        // Subscribe to the "welcome" topic for receiving welcome messages
+        messaging.subscribeToTopic("welcome from wonder-trip");
+
     }
 }

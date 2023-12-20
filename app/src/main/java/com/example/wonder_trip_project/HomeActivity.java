@@ -34,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
     ImageView imgContent;
     String userId, regUsername, regPassword;
     StorageReference storageRef;
+    TextView welcomMessage;
     DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
 
 
@@ -43,12 +44,13 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
+        welcomMessage = findViewById(R.id.textView4);
         Intent intent = getIntent();
         userId = intent.getStringExtra("userId");
         regUsername = intent.getStringExtra("regUsername");
         regPassword = intent.getStringExtra("regPassword");
 
+        welcomMessage.setText("Welcome, "+ regUsername);
         findViewById(R.id.addJournal).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

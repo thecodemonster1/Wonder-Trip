@@ -15,8 +15,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    TextView username, email, dob;
-    String userId, dbUsername, dbEmail, dbDob;
+    TextView username, email, dob, phone;
+    String userId, dbUsername, dbEmail, dbDob, dbPhone;
     DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users");
 
     @Override
@@ -27,6 +27,7 @@ public class ProfileActivity extends AppCompatActivity {
         username = findViewById(R.id.profileUsername);
         email = findViewById(R.id.profileEmail);
         dob = findViewById(R.id.profileDob);
+        phone = findViewById(R.id.profilePhone);
 
         Intent intent = getIntent();
         userId = intent.getStringExtra("userId");
@@ -38,10 +39,12 @@ public class ProfileActivity extends AppCompatActivity {
                 dbUsername = snapshot.child("username").getValue(String.class);
                 dbEmail = snapshot.child("email").getValue(String.class);
                 dbDob = snapshot.child("dob").getValue(String.class);
+                dbPhone = snapshot.child("phone").getValue(String.class);
 
                 username.setText(dbUsername);
                 email.setText(dbEmail);
                 dob.setText(dbDob);
+                phone.setText(dbPhone);
             }
 
             @Override
