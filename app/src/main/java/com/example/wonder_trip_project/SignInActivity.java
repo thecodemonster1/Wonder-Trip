@@ -104,7 +104,7 @@ public class SignInActivity extends AppCompatActivity {
                         Toast.makeText(SignInActivity.this, "Passwords are doesn't match", Toast.LENGTH_SHORT).show();
                     }
                 }else{
-                    Toast.makeText(SignInActivity.this, "You missed on or more field to fill", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignInActivity.this, "You missed one or more field to fill", Toast.LENGTH_SHORT).show();
                 }
 
                 if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {

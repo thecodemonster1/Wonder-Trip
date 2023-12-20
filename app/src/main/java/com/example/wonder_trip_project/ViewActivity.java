@@ -98,7 +98,6 @@ public class ViewActivity extends AppCompatActivity implements MyAdapter.OnJourn
         Intent intent = new Intent(getApplicationContext(), TileViewActivity.class);
         intent.putExtra("userId", userId);
         intent.putExtra("journalId", journalId);
-        intent.putExtra("recycleView", (CharSequence) recyclerView);
         startActivity(intent);
     }
 

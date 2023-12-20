@@ -35,7 +35,7 @@ public class TileViewActivity extends AppCompatActivity {
     ImageView imageBox;
     Uri imageUri;
     FloatingActionButton editButton, deleteButton;
-    RecyclerView recyclerView = findViewById(R.id.activity2recycleView);
+//    RecyclerView recyclerView = findViewById(R.id.activity2recycleView);
     DatabaseReference journalRef;
     MyAdapter adapter;
     ArrayList<JournalModel> journalList;
@@ -95,19 +95,19 @@ public class TileViewActivity extends AppCompatActivity {
             }
         });
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                RecyclerView.ViewHolder viewHolder = recyclerView.findContainingViewHolder(view);
-                if (viewHolder != null) {
-                    int position = viewHolder.getAbsoluteAdapterPosition();
-                    deleteJournalBtn(journalId, position);
-                } else {
-                    // Handle the case where the ViewHolder is not found
-                    showLog("ViewHolder is not found");
-                }
-            }
-        });
+//        deleteButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                RecyclerView.ViewHolder viewHolder = recyclerView.findContainingViewHolder(view);
+//                if (viewHolder != null) {
+//                    int position = viewHolder.getAbsoluteAdapterPosition();
+//                    deleteJournalBtn(journalId, position);
+//                } else {
+//                    // Handle the case where the ViewHolder is not found
+//                    showLog("ViewHolder is not found");
+//                }
+//            }
+//        });
 
     }
 

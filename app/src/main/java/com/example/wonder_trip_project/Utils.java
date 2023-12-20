@@ -20,21 +20,6 @@ public class Utils {
 
     public static void showLog(String message, String type, String tag) {
 
-//        if (type.equals("e") || type.equals("error")) {
-//            Log.e(tag, message);
-//        } else if (type.equals("d") || type.equals("debug")) {
-//            Log.d(tag, message);
-//        } else if (type.equals("i") || type.equals("info")) {
-//            Log.i(tag, message);
-//        } else if (type.equals("w") || type.equals("warning")) {
-//            Log.w(tag, message);
-//        } else if (type.equals("v") || type.equals("verborse")) {
-//            Log.v(tag, message);
-//        } else if (type.equals("wtf") || type.equals("what a terrible failiure")) {
-//            Log.wtf(tag, message);
-//        } else {
-//            Log.e(tag, "Unknown log type: " + type + ". Message: " + message);
-//        }
         switch (type) {
             case "e":
             case "error":

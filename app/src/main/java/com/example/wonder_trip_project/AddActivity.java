@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
@@ -40,6 +41,7 @@ public class AddActivity extends AppCompatActivity {
     TextInputEditText txtContentTitle, txtContentText;
     String contentTitle, dateText, contentRate, contentText, userId;
     String journalId;
+    Button mapActivityBtn;
     Uri imageUri;
     DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference journalsRef;
@@ -66,13 +68,18 @@ public class AddActivity extends AppCompatActivity {
         saveContentBtn = findViewById(R.id.saveContentFab);
         imgContentRate = findViewById(R.id.imgContentRate);
         imgContentJournal = findViewById(R.id.imgContentJournal);
+        mapActivityBtn = findViewById(R.id.mapActivityBtn);
 
-//        if (imgContentJournal != null, imageUri != null, userId != null, journalsRef != null, journalId != null){
-//            imageUpload(imgContentJournal, imageUri, userId, journalsRef, journalId);
-//        }
+        mapActivityBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent1 = new Intent(getApplicationContext(), MapViewActivity.class);
+                startActivity(intent1);
+            }
+        });
+
         setDatePicker();
         setRateNumberPicker();
-//        saveContents(userId, journalsRef, journalId);
         onImageClick_addImage();
     }
 
@@ -260,7 +267,7 @@ public class AddActivity extends AppCompatActivity {
             if (progressInt == 100){
                 showToast(getApplicationContext(), "Image uploaded successfully");
             }
-            showLog("Upload progress: " + progressInt + "%");
+            showToast(getApplicationContext(),"Upload progress: " + progressInt + "%");
         });
 
         saveContentBtn.setOnClickListener(new View.OnClickListener() {
