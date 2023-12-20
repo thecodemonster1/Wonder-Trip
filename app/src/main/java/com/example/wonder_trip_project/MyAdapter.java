@@ -23,6 +23,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     String userId;
     OnJournalClickListener listener;
 
+    public void removeItem(int position) {
+        journalsList.remove(position); // Remove from data list
+        notifyItemRemoved(position); // Notify RecyclerView
+    }
+
 
     public interface OnJournalClickListener {
         void onJournalClicked(String userId, String journalId);

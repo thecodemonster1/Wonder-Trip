@@ -25,7 +25,7 @@ public class ViewActivity extends AppCompatActivity implements MyAdapter.OnJourn
 
     ImageView imgContent;
     String userId, regUsername, regPassword, journalId;
-    RecyclerView recyclerView;
+    public static RecyclerView recyclerView;
     View tileLayout;
     ArrayList<JournalModel> journalList;
     MyAdapter adapter;
@@ -98,6 +98,7 @@ public class ViewActivity extends AppCompatActivity implements MyAdapter.OnJourn
         Intent intent = new Intent(getApplicationContext(), TileViewActivity.class);
         intent.putExtra("userId", userId);
         intent.putExtra("journalId", journalId);
+        intent.putExtra("recycleView", (CharSequence) recyclerView);
         startActivity(intent);
     }
 
