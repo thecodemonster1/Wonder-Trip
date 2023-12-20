@@ -82,7 +82,6 @@ public class AddActivity extends AppCompatActivity {
         if (requestCode == ImagePicker.REQUEST_CODE && resultCode == RESULT_OK) {
             imageUri = data.getData();
             imageUpload(imgContentJournal, imageUri, userId, journalsRef, journalId);
-//            imageUpload(imgContentJournal, imageUri, userId, journalsRef, journalId);
         } else {
             showToast(this, "Image selection failed.");
         }
@@ -236,7 +235,6 @@ public class AddActivity extends AppCompatActivity {
 
     public void imageUpload(@NonNull ImageView imgContent, Uri uri, String userId, DatabaseReference journalsRef, String journalId) {
         // Set the image to the ImageView
-
         Glide.with(this)
                 .load(uri)
                 .into(imgContent);
